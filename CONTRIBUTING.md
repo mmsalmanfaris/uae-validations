@@ -165,6 +165,29 @@ npm run verify
 
 5. Run `npm run verify`.
 
+### Documentation site
+
+The [API reference](https://mmsalmanfaris.github.io/uae-validations/) is generated, never
+written by hand:
+
+- **Pages:** TypeDoc builds one page per module and export from the TSDoc comments in `src/`.
+  The module comment at the top of each `index.ts` becomes the module's overview page.
+- **Landing page and changelog:** `README.md` is the landing page, and `CHANGELOG.md` is
+  published as a document.
+- **Styling:** `typedoc.css` overrides the default TypeDoc theme's colors and layout.
+- **Search metadata:** `scripts/postprocess-docs.mjs` gives each page its own meta description
+  (from its first doc paragraph), a canonical link, and a descriptive title for module pages.
+  TypeDoc writes `sitemap.xml`, and `typedoc.json` adds schema.org `SoftwareSourceCode` data.
+- **AI-readable files:** `scripts/build-llms.mjs` copies `llms.txt` into the site and builds
+  `llms-full.txt` (`llms.txt`, README, and changelog in one file). Every `` `call` → `result` ``
+  pair in `llms.txt` is run as a test, like README examples.
+
+Run `npm run docs` and open `api-docs/index.html` to preview. The build fails if an export has
+no TSDoc comment or a `{@link}` is broken. The **API docs** workflow publishes the site to GitHub
+Pages on every push to `main`, so the site always matches the latest release. If you change the
+public API, update `llms.txt` and the "Which function do I need?" table in the README too. When
+you add a module, add its search title to `MODULE_TITLES` in `scripts/postprocess-docs.mjs`.
+
 ## Pull requests
 
 1. Push your branch to your fork and open a pull request **into `development`**.
@@ -276,6 +299,7 @@ One-time repository settings, applied by `scripts/setup-github.sh` with the GitH
 - Allow squash merges (for `development`) and merge commits (for releases), with squash commits
   using the pull request title.
 - Enable Discussions, private vulnerability reporting, and Dependabot security updates.
+- Enable GitHub Pages with GitHub Actions as the source, for the API docs.
 - For publishing: add an `npm` environment and configure npm Trusted Publishing for
   `.github/workflows/release.yml`.
 
