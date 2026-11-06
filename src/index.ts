@@ -26,9 +26,11 @@ export { createFailure, createSuccess, luhnCheck, luhnCheckDigit } from './core/
 export * from './emirates-id';
 export * from './mrz';
 
-// Contact
+// Contact & location
 export * from './phone';
 export * from './administrative';
+export * from './address';
+export * from './vehicle';
 
 // Banking & tax
 export * from './iban';

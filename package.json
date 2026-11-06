@@ -1,7 +1,7 @@
 {
   "name": "uae-validations",
   "version": "0.1.0",
-  "description": "Zero-dependency UAE data validation for TypeScript and JavaScript: Emirates ID, phone numbers, IBAN, TRN/TIN, SWIFT/BIC, passport and Emirates ID MRZ, emirates, AED currency and words, VAT, and Arabic name normalization.",
+  "description": "Zero-dependency UAE data validation for TypeScript and JavaScript: Emirates ID, phone numbers, IBAN, TRN/TIN, SWIFT/BIC, passport and Emirates ID MRZ, emirates, Makani numbers, Dubai vehicle plates, AED currency and words, VAT, and Arabic name normalization.",
   "type": "commonjs",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -37,6 +37,12 @@
       ],
       "arabic": [
         "./dist/arabic/index.d.ts"
+      ],
+      "address": [
+        "./dist/address/index.d.ts"
+      ],
+      "vehicle": [
+        "./dist/vehicle/index.d.ts"
       ]
     }
   },
@@ -151,6 +157,26 @@
         "default": "./dist/arabic/index.js"
       }
     },
+    "./address": {
+      "import": {
+        "types": "./dist/address/index.d.mts",
+        "default": "./dist/address/index.mjs"
+      },
+      "require": {
+        "types": "./dist/address/index.d.ts",
+        "default": "./dist/address/index.js"
+      }
+    },
+    "./vehicle": {
+      "import": {
+        "types": "./dist/vehicle/index.d.mts",
+        "default": "./dist/vehicle/index.mjs"
+      },
+      "require": {
+        "types": "./dist/vehicle/index.d.ts",
+        "default": "./dist/vehicle/index.js"
+      }
+    },
     "./package.json": "./package.json"
   },
   "files": [
@@ -214,7 +240,10 @@
     "aed",
     "dirham",
     "amount-to-words",
-    "arabic-normalization"
+    "arabic-normalization",
+    "makani",
+    "vehicle-plate",
+    "dubai"
   ],
   "author": "M.M. Salman Faris <mmsalmanfaris@outlook.com>",
   "license": "MIT",

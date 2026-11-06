@@ -35,3 +35,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `getVatRegistrationRequirement`.
 - `uae-validations/arabic`: `normalizeArabic`, `containsArabic`, `validatePersonName`, and
   `areNamesEquivalent`.
+- `uae-validations/address`: Makani numbers (`isValidMakani`, `parseMakani`, `validateMakani`,
+  `formatMakani`), checked for structure as documented by Dubai Municipality.
+- `uae-validations/vehicle`: Dubai plates (`isValidDubaiPlate`, `parseDubaiPlate`,
+  `validateDubaiPlate`, `formatDubaiPlate`), following RTA. Other emirates' plates and Ejari and
+  Tawtheeq contract numbers are not included, because no official format is published.

@@ -56,6 +56,14 @@ const UNKNOWN_INPUT_FUNCTIONS: Record<string, (input: unknown, ...rest: never[])
   isValidPersonName: lib.isValidPersonName,
   validatePersonName: lib.validatePersonName,
   areNamesEquivalent: lib.areNamesEquivalent,
+  parseMakani: lib.parseMakani,
+  isValidMakani: lib.isValidMakani,
+  validateMakani: lib.validateMakani,
+  formatMakani: lib.formatMakani,
+  parseDubaiPlate: lib.parseDubaiPlate,
+  isValidDubaiPlate: lib.isValidDubaiPlate,
+  validateDubaiPlate: lib.validateDubaiPlate,
+  formatDubaiPlate: lib.formatDubaiPlate,
 };
 
 const idLike = fc

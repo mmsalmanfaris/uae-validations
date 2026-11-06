@@ -12,6 +12,8 @@
     "src/currency/index.ts",
     "src/vat/index.ts",
     "src/arabic/index.ts",
+    "src/address/index.ts",
+    "src/vehicle/index.ts",
     "src/index.ts"
   ],
   "out": "api-docs",

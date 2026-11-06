@@ -64,5 +64,17 @@
     "path": "dist/arabic/index.mjs",
     "import": "{ normalizeArabic, validatePersonName }",
     "limit": "1.5 kB"
+  },
+  {
+    "name": "uae-validations/address",
+    "path": "dist/address/index.mjs",
+    "import": "{ validateMakani }",
+    "limit": "1 kB"
+  },
+  {
+    "name": "uae-validations/vehicle",
+    "path": "dist/vehicle/index.mjs",
+    "import": "{ validateDubaiPlate }",
+    "limit": "1.2 kB"
   }
 ]

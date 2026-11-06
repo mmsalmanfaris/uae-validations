@@ -13,6 +13,8 @@ export default defineConfig({
     'src/currency/index.ts',
     'src/vat/index.ts',
     'src/arabic/index.ts',
+    'src/address/index.ts',
+    'src/vehicle/index.ts',
   ],
   format: ['cjs', 'esm'],
   dts: true,

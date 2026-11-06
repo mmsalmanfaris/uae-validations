@@ -256,6 +256,54 @@ isValidPersonName('Ahmed محمد'); // false
 Removes diacritics and tatweel, unifies alef and Persian-keyboard letters, and optionally taa
 marbuta, alef maqsura, and hamza. Name matching never transliterates or guesses between spellings.
 
+## Makani numbers
+
+```ts
+import { isValidMakani, parseMakani, formatMakani } from 'uae-validations/address';
+
+isValidMakani('30032 95320'); // true
+parseMakani('Makani No. 00410 85963')?.makani; // '0041085963'
+formatMakani('3003295320'); // '30032 95320'
+```
+
+Makani numbers identify building entrances. Dubai Municipality's Makani web-service manual writes
+them as 10 digits in two groups of five. Only the structure is checked: whether a number belongs
+to a real entrance can only be confirmed through Dubai Municipality's Makani service. The manual
+also notes that the same number can exist in more than one emirate, so a Makani number does not
+tell you the emirate. Pass Makani numbers as strings, because numbers drop leading zeros.
+
+Abu Dhabi's Onwani system has no single code to validate. An Onwani address is a building
+number, street name, city, area, and postal code (DMT).
+
+## Dubai vehicle plates
+
+```ts
+import { isValidDubaiPlate, parseDubaiPlate, validateDubaiPlate } from 'uae-validations/vehicle';
+
+isValidDubaiPlate('AA 12345'); // true
+parseDubaiPlate('Dubai V 1234')?.code; // 'V'
+validateDubaiPlate('ABC 123').code; // 'PLATE_INVALID_CODE'
+validateDubaiPlate('A 123456').code; // 'PLATE_INVALID_NUMBER'
+```
+
+A Dubai plate is a code of one or two letters (such as `A`, `V`, or `AA`) followed by a number of
+one to five digits (RTA). Only the structure is checked, not whether the plate has been issued.
+Export, trade, and diplomatic plates are not covered.
+
+### Other emirates and tenancy contracts
+
+These are left out on purpose, because no official format is published:
+
+| Item                                   | What the official source says                                                   |
+| -------------------------------------- | ------------------------------------------------------------------------------- |
+| Plates outside Dubai                   | Abu Dhabi (DMT) publishes that plates have one to five digits, but not its codes |
+| Ejari (Dubai) contract numbers         | Dubai Land Department does not publish a number format                          |
+| Tawtheeq (Abu Dhabi) contract numbers  | DMT does not publish a number format                                            |
+
+Third-party guides describe these formats, but they disagree with each other. A validator built
+from them could reject real values. Each will be added once an official specification is
+available.
+
 ## The validation contract
 
 Every module follows the same shape as `lanka-validations`:
@@ -272,16 +320,15 @@ formatX(value, style?, options?): string | null
 
 ## Roadmap
 
-Next, per-emirate modules, each emirate's rules in its own file with its own source:
+Next:
 
-| Module     | Scope                                                      |
-| ---------- | ---------------------------------------------------------- |
-| `vehicle`  | Number plates for each emirate                             |
-| `address`  | Makani (Dubai), Onwani (Abu Dhabi), P.O. Box               |
-| `property` | Ejari (Dubai), Tawtheeq (Abu Dhabi)                        |
-| `business` | Trade licence authorities, including free zones            |
-| `i18n`     | Arabic messages for every error code                       |
-| `schema`   | Zod, Yup, and React Hook Form adapters                     |
+| Module     | Scope                                                                     |
+| ---------- | ------------------------------------------------------------------------- |
+| `vehicle`  | Plates for other emirates, once their authorities publish the code scheme |
+| `property` | Ejari and Tawtheeq contract numbers, once a format is published           |
+| `business` | Trade licence authorities, including free zones                           |
+| `i18n`     | Arabic messages for every error code                                      |
+| `schema`   | Zod, Yup, and React Hook Form adapters                                    |
 
 ## License
 
