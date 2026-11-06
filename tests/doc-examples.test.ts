@@ -4,8 +4,8 @@ import { describe, expect, it } from 'vitest';
 import * as lib from '../src';
 
 /**
- * Runs every `call(); // result` line inside a TSDoc ```ts example and in README.md,
- * so documented results always match the library.
+ * Runs every `call(); // result` line inside a TSDoc ```ts example and in README.md, and
+ * every `call` → `result` pair in llms.txt, so documented results always match the library.
  */
 
 const root = join(import.meta.dirname, '..');
@@ -46,9 +46,21 @@ function extract(file: string, stripComment: boolean): Example[] {
   return examples;
 }
 
+/** Reads `` `call` → `result` `` pairs, the format llms.txt uses for AI tools. */
+function extractLlms(file: string): Example[] {
+  return [...readFileSync(file, 'utf8').matchAll(/`([^`]+)` → `([^`]+)`/g)].map((match) => ({
+    location: `${relative(root, file)}: ${match[1]!}`,
+    expression: match[1]!,
+    expected: match[2]!,
+  }));
+}
+
+const llmsExamples = extractLlms(join(root, 'llms.txt'));
+
 const examples = [
   ...walk(join(root, 'src')).flatMap((file) => extract(file, true)),
   ...extract(join(root, 'README.md'), false),
+  ...llmsExamples,
 ];
 
 const names = Object.keys(lib);
@@ -62,6 +74,7 @@ const evaluate = (code: string): unknown => {
 describe('documented examples', () => {
   it('found examples to check', () => {
     expect(examples.length).toBeGreaterThan(20);
+    expect(llmsExamples.length).toBeGreaterThan(5);
   });
 
   it.each(examples.map((e) => [e.location, e] as const))('%s', (_location, example) => {

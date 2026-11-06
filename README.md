@@ -1,13 +1,19 @@
 # uae-validations
 
-Zero-dependency UAE data validation for TypeScript and JavaScript. It is the companion to
-[`lanka-validations`](https://github.com/mmsalmanfaris/lanka-validations) and uses the same API
-contract.
+[![CI](https://github.com/mmsalmanfaris/uae-validations/actions/workflows/ci.yml/badge.svg)](https://github.com/mmsalmanfaris/uae-validations/actions/workflows/ci.yml)
+[![API docs](https://img.shields.io/badge/docs-API%20reference-00732f)](https://mmsalmanfaris.github.io/uae-validations/)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-- TypeScript declarations, ESM and CommonJS, tree-shakeable subpath imports
-- Validators take `unknown` and never throw on ordinary invalid input
+**uae-validations** is a zero-dependency TypeScript and JavaScript library for validating,
+parsing, and formatting UAE data: Emirates ID numbers, UAE mobile and landline numbers, UAE
+IBANs, TRN and TIN tax numbers, SWIFT/BIC codes, passport and ID-card MRZ, emirate names, Makani
+numbers, Dubai vehicle plates, AED amounts, VAT, and Arabic names. Every rule cites an official
+source, such as ICP, TDRA, CBUAE, the FTA, RTA, Dubai Municipality, or ICAO.
+
+- TypeScript declarations, ESM and CommonJS, tree-shakeable subpath imports (0.6 to 2.1 kB each, minified and brotli-compressed)
+- Validators take `unknown` and never throw, so they are safe on raw form and API input
 - Arabic-Indic digits (`٠١٢٣`) and right-to-left marks are normalized automatically
-- Every country-specific rule cites an official UAE source
+- Works in Node.js 20+, browsers, Deno, and Bun
 
 **Documentation:** [API reference](https://mmsalmanfaris.github.io/uae-validations/), generated
 from the TSDoc on every export. AI tools can read [llms.txt](https://mmsalmanfaris.github.io/uae-validations/llms.txt)
@@ -22,7 +28,34 @@ or the whole documentation in [llms-full.txt](https://mmsalmanfaris.github.io/ua
 npm install uae-validations
 ```
 
-Requires Node.js 20+, or any modern browser, Deno, or Bun.
+## Quick start
+
+```ts
+import { isValidEmiratesId, formatUaePhone, validateUaeIban } from 'uae-validations';
+
+isValidEmiratesId('784-1990-1234567-6'); // true
+formatUaePhone('050 123 4567', 'e164'); // '+971501234567'
+validateUaeIban('AE080331234567890123456').code; // 'IBAN_CHECKSUM_MISMATCH'
+```
+
+## Which function do I need?
+
+| To validate or convert | Use | Import from |
+| --- | --- | --- |
+| Emirates ID number | `isValidEmiratesId`, `validateEmiratesId`, `maskEmiratesId` | `uae-validations/emirates-id` |
+| UAE mobile or landline number | `isValidUaeMobile`, `validateUaePhone`, `formatUaePhone` | `uae-validations/phone` |
+| UAE IBAN | `isValidUaeIban`, `parseUaeIban`, `buildUaeIban` | `uae-validations/iban` |
+| TRN or TIN (VAT, Corporate Tax, e-invoicing) | `isValidTrn`, `isValidTin`, `tinFromTrn` | `uae-validations/tax` |
+| SWIFT/BIC code | `isValidUaeBic`, `parseBic` | `uae-validations/swift` |
+| Passport, ID card, or visa MRZ | `parseMrz`, `validateMrz`, `mrzCheckDigit` | `uae-validations/mrz` |
+| Emirate name or ISO 3166-2 code | `normalizeEmirate`, `findEmirate` | `uae-validations/administrative` |
+| Makani number (building entrance) | `isValidMakani`, `formatMakani` | `uae-validations/address` |
+| Dubai vehicle plate | `isValidDubaiPlate`, `parseDubaiPlate` | `uae-validations/vehicle` |
+| AED amount, or AED in words for cheques and invoices | `parseAed`, `formatAed`, `aedToWords` | `uae-validations/currency` |
+| VAT at 5%, or whether a business must register | `calculateVat`, `getVatRegistrationRequirement` | `uae-validations/vat` |
+| Arabic text and person names | `normalizeArabic`, `validatePersonName`, `areNamesEquivalent` | `uae-validations/arabic` |
+
+Everything is also exported from `uae-validations`.
 
 ## Emirates ID
 
@@ -307,6 +340,110 @@ These are left out on purpose, because no official format is published:
 Third-party guides describe these formats, but they disagree with each other. A validator built
 from them could reject real values. Each will be added once an official specification is
 available.
+
+## Use with forms and APIs
+
+`isValidX` fits any boolean check, and `validateX` returns a message and a stable error code.
+
+```ts
+// Zod
+import { z } from 'zod';
+import { isValidEmiratesId } from 'uae-validations/emirates-id';
+import { isValidUaeMobile } from 'uae-validations/phone';
+
+const KycSchema = z.object({
+  emiratesId: z.string().refine((value) => isValidEmiratesId(value), 'Invalid Emirates ID'),
+  mobile: z.string().refine((value) => isValidUaeMobile(value), 'Invalid UAE mobile number'),
+});
+```
+
+```tsx
+// React Hook Form: return the library's message on failure
+import { validateUaeIban } from 'uae-validations/iban';
+
+<input {...register('iban', { validate: (value) => validateUaeIban(value).error ?? true })} />;
+```
+
+```ts
+// Express: return the error code so clients can translate it
+import { validateUaePhone } from 'uae-validations/phone';
+
+app.post('/contacts', (req, res) => {
+  const phone = validateUaePhone(req.body.phone, { type: 'mobile' });
+  if (!phone.isValid) return res.status(400).json({ code: phone.code, error: phone.error });
+  saveContact({ phone: phone.data.e164 });
+  res.sendStatus(201);
+});
+```
+
+## FAQ
+
+### How do I validate an Emirates ID in JavaScript?
+
+Call `isValidEmiratesId(value)` from `uae-validations/emirates-id`. It accepts 15 digits with or
+without hyphens or spaces (`784-1990-1234567-6`), checks the `784` prefix and that the year is
+between 1900 and the current year, and returns `false` instead of throwing on bad input. Use
+`validateEmiratesId` to get an error code.
+
+### Does the Emirates ID have a check digit?
+
+The last digit is widely reported to be a Luhn check digit, but ICP, the issuing authority, does
+not publish the algorithm. This library therefore does not reject Luhn failures by default.
+`parseEmiratesId` reports `luhnValid`, and `{ verifyChecksum: true }` enforces it if you choose to.
+
+### What is a valid UAE mobile number?
+
+A UAE mobile number is `05` plus one digit plus seven digits, such as `050 123 4567`, or
+`+971 50 123 4567` in international form. TDRA has allocated the codes 050, 052, 054, 055, 056,
+and 058, so `isValidUaeMobile` rejects 051, 053, 057, and 059 by default. A prefix does not tell
+you the operator, because numbers can be ported.
+
+### Why not just use a regex?
+
+A regex checks shape, not meaning. It accepts an Emirates ID from the year 2099, a mobile number
+with an unallocated code such as 053, and an IBAN with a mistyped digit. This library also checks
+the IBAN MOD 97-10 checksum, ICAO MRZ check digits, and impossible MRZ dates, and returns a
+specific error code for each failure.
+
+### What is the difference between a TRN and a TIN?
+
+The Federal Tax Authority issues a 15-digit Tax Registration Number (TRN) to VAT and Corporate
+Tax registrants, and a 10-digit Tax Identification Number (TIN), used for e-invoicing, which is
+the first 10 digits of the TRN. `tinFromTrn` extracts it, and `doesTinMatchTrn` compares them.
+
+### Does validation prove a number is real?
+
+No. Validation confirms the format and, where one exists, the checksum. It cannot confirm that an
+Emirates ID, phone number, IBAN, TRN, Makani number, or plate is issued or belongs to a person.
+Use the issuing authority's own service for that, such as the FTA's TRN verification.
+
+### Does it support Arabic input?
+
+Yes. Arabic-Indic (`٠١٢٣`) and Persian digits are converted, and right-to-left marks are removed,
+so `isValidEmiratesId('٧٨٤١٩٩٠١٢٣٤٥٦٧٦')` returns `true`. Emirate lookup accepts Arabic names, and
+`aedToWords` writes amounts in Arabic with correct number–noun agreement.
+
+## Data sources
+
+Each module exports its sources as a `*_SOURCES` constant with a `lastReviewed` date. All rules
+were last reviewed on 2026-11-06.
+
+| Module | Authority |
+| --- | --- |
+| `emirates-id` | Federal Authority for Identity, Citizenship, Customs and Port Security (ICP); UAE Design System |
+| `phone` | Telecommunications and Digital Government Regulatory Authority (TDRA), National Numbering Plan |
+| `iban` | Central Bank of the UAE (CBUAE); ISO 13616 |
+| `tax`, `vat` | Federal Tax Authority (FTA) |
+| `swift` | ISO 9362 (SWIFT) |
+| `mrz` | International Civil Aviation Organization (ICAO), Doc 9303 |
+| `administrative` | ISO 3166-2:AE; UAE Government portal (u.ae) |
+| `address` | Dubai Municipality (Makani); Abu Dhabi Department of Municipalities and Transport (Onwani) |
+| `vehicle` | Roads and Transport Authority (RTA), Dubai |
+| `currency` | ISO 4217 |
+| `arabic` | Unicode Standard |
+
+Spotted an out-of-date rule? [Report a data correction](https://github.com/mmsalmanfaris/uae-validations/issues/new?template=data_correction.yml)
+with a link to the official source.
 
 ## The validation contract
 

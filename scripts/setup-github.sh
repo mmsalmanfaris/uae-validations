@@ -45,6 +45,39 @@ else
 fi
 echo "Enabled GitHub Pages (source: GitHub Actions)"
 
+# About box: description, website, and topics, taken from package.json so npm, GitHub, and the
+# docs describe the package the same way.
+description="$(node -p "require('./package.json').description")"
+homepage="$(node -p "require('./package.json').homepage")"
+gh repo edit "$REPO" --description "$description" --homepage "$homepage" >/dev/null
+gh api -X PUT "repos/$REPO/topics" --input - >/dev/null <<'JSON'
+{
+  "names": [
+    "uae",
+    "united-arab-emirates",
+    "emirates-id",
+    "validation",
+    "validator",
+    "typescript",
+    "javascript",
+    "zero-dependency",
+    "phone-number",
+    "iban",
+    "trn",
+    "vat",
+    "mrz",
+    "icao-9303",
+    "aed",
+    "arabic",
+    "makani",
+    "kyc",
+    "form-validation",
+    "dubai"
+  ]
+}
+JSON
+echo "Set description, website, and topics"
+
 # 3. Labels used by the issue forms and CONTRIBUTING.md.
 label() { gh label create "$1" --repo "$REPO" --color "$2" --description "$3" --force >/dev/null; }
 label triage 'fbca04' 'New; not reviewed yet'

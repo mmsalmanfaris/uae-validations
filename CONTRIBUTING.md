@@ -175,13 +175,18 @@ written by hand:
 - **Landing page and changelog:** `README.md` is the landing page, and `CHANGELOG.md` is
   published as a document.
 - **Styling:** `typedoc.css` overrides the default TypeDoc theme's colors and layout.
+- **Search metadata:** `scripts/postprocess-docs.mjs` gives each page its own meta description
+  (from its first doc paragraph), a canonical link, and a descriptive title for module pages.
+  TypeDoc writes `sitemap.xml`, and `typedoc.json` adds schema.org `SoftwareSourceCode` data.
 - **AI-readable files:** `scripts/build-llms.mjs` copies `llms.txt` into the site and builds
-  `llms-full.txt` (`llms.txt`, README, and changelog in one file).
+  `llms-full.txt` (`llms.txt`, README, and changelog in one file). Every `` `call` → `result` ``
+  pair in `llms.txt` is run as a test, like README examples.
 
 Run `npm run docs` and open `api-docs/index.html` to preview. The build fails if an export has
 no TSDoc comment or a `{@link}` is broken. The **API docs** workflow publishes the site to GitHub
 Pages on every push to `main`, so the site always matches the latest release. If you change the
-public API, update `llms.txt` too.
+public API, update `llms.txt` and the "Which function do I need?" table in the README too. When
+you add a module, add its search title to `MODULE_TITLES` in `scripts/postprocess-docs.mjs`.
 
 ## Pull requests
 

@@ -17,6 +17,7 @@
     "src/index.ts"
   ],
   "out": "api-docs",
+  "hostedBaseUrl": "https://mmsalmanfaris.github.io/uae-validations/",
   "readme": "README.md",
   "customCss": "./typedoc.css",
   "includeVersion": true,
@@ -80,5 +81,7 @@
     "TypeParameter",
     "Parameter",
     "Reference"
-  ]
+  ],
+  "customFooterHtml": "<script type=\"application/ld+json\">{\"@context\":\"https://schema.org\",\"@type\":\"SoftwareSourceCode\",\"name\":\"uae-validations\",\"description\":\"Zero-dependency TypeScript and JavaScript library for validating, parsing, and formatting UAE data: Emirates ID, UAE phone numbers, IBAN, TRN and TIN, SWIFT/BIC, MRZ, emirates, Makani numbers, Dubai vehicle plates, AED, VAT, and Arabic names.\",\"url\":\"https://mmsalmanfaris.github.io/uae-validations/\",\"codeRepository\":\"https://github.com/mmsalmanfaris/uae-validations\",\"programmingLanguage\":[\"TypeScript\",\"JavaScript\"],\"runtimePlatform\":\"Node.js\",\"license\":\"https://opensource.org/licenses/MIT\",\"author\":{\"@type\":\"Person\",\"name\":\"M.M. Salman Faris\",\"url\":\"https://github.com/mmsalmanfaris\"},\"keywords\":[\"Emirates ID validation\",\"UAE phone number validation\",\"UAE IBAN\",\"TRN\",\"MRZ\",\"AED\"]}</script>",
+  "customFooterHtmlDisableWrapper": true
 }

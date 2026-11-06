@@ -1,7 +1,7 @@
 {
   "name": "uae-validations",
   "version": "0.1.0",
-  "description": "Zero-dependency UAE data validation for TypeScript and JavaScript: Emirates ID, phone numbers, IBAN, TRN/TIN, SWIFT/BIC, passport and Emirates ID MRZ, emirates, Makani numbers, Dubai vehicle plates, AED currency and words, VAT, and Arabic name normalization.",
+  "description": "Validate, parse, and format UAE data in TypeScript and JavaScript with zero dependencies: Emirates ID, UAE phone numbers, IBAN, TRN and TIN, SWIFT/BIC, passport and ID-card MRZ, emirates, Makani numbers, Dubai vehicle plates, AED amounts and words, VAT, and Arabic names.",
   "type": "commonjs",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -199,7 +199,7 @@
     "test:coverage": "vitest run --coverage",
     "lint:package": "npm run build && publint --strict && attw --pack .",
     "size": "npm run build && size-limit",
-    "docs": "typedoc && node scripts/build-llms.mjs",
+    "docs": "typedoc && node scripts/postprocess-docs.mjs && node scripts/build-llms.mjs",
     "check:package": "npm run build && node scripts/check-package.mjs",
     "prepublishOnly": "npm run typecheck && npm run lint && npm run format:check && npm run test:coverage && npm run lint:package && npm run size && node scripts/check-package.mjs",
     "verify": "npm run typecheck && npm run lint && npm run format:check && npm run docs && npm run test:coverage && npm run lint:package && npm run size && npm run check:package"
@@ -245,7 +245,11 @@
     "arabic-normalization",
     "makani",
     "vehicle-plate",
-    "dubai"
+    "dubai",
+    "uae-validation",
+    "phone-validation",
+    "iban-validation",
+    "zod"
   ],
   "author": "M.M. Salman Faris <mmsalmanfaris@outlook.com>",
   "license": "MIT",
