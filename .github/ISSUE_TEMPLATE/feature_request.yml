@@ -1,0 +1,49 @@
+name: Feature request
+description: Suggest a new option, helper, or API change for an existing module.
+labels: [enhancement, triage]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        To ask for a **new identifier or format** (for example, a trade licence number), use **Data source request** instead: every new rule needs an official source first.
+  - type: dropdown
+    id: module
+    attributes:
+      label: Module
+      options:
+        - emirates-id
+        - phone
+        - iban
+        - tax
+        - swift
+        - mrz
+        - administrative
+        - address
+        - vehicle
+        - currency
+        - vat
+        - arabic
+        - core / package-wide
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What are you trying to do, and why can't you do it today?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed API
+      render: ts
+      placeholder: formatUaePhone('0501234567', 'whatsapp'); // '971501234567'
+  - type: dropdown
+    id: contribute
+    attributes:
+      label: Would you open the pull request?
+      options:
+        - 'Yes'
+        - 'Yes, with guidance'
+        - 'No'

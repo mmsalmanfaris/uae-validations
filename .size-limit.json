@@ -1,0 +1,80 @@
+[
+  {
+    "name": "Everything (ESM)",
+    "path": "dist/index.mjs",
+    "import": "*",
+    "limit": "12 kB"
+  },
+  {
+    "name": "uae-validations/emirates-id",
+    "path": "dist/emirates-id/index.mjs",
+    "import": "{ validateEmiratesId }",
+    "limit": "1.5 kB"
+  },
+  {
+    "name": "uae-validations/phone",
+    "path": "dist/phone/index.mjs",
+    "import": "{ validateUaePhone, formatUaePhone }",
+    "limit": "1.8 kB"
+  },
+  {
+    "name": "uae-validations/iban",
+    "path": "dist/iban/index.mjs",
+    "import": "{ validateUaeIban }",
+    "limit": "1.2 kB"
+  },
+  {
+    "name": "uae-validations/tax",
+    "path": "dist/tax/index.mjs",
+    "import": "{ validateTrn }",
+    "limit": "1 kB"
+  },
+  {
+    "name": "uae-validations/swift",
+    "path": "dist/swift/index.mjs",
+    "import": "{ validateUaeBic }",
+    "limit": "1 kB"
+  },
+  {
+    "name": "uae-validations/mrz",
+    "path": "dist/mrz/index.mjs",
+    "import": "{ validateMrz }",
+    "limit": "2.5 kB"
+  },
+  {
+    "name": "uae-validations/administrative",
+    "path": "dist/administrative/index.mjs",
+    "import": "{ findEmirate }",
+    "limit": "2 kB"
+  },
+  {
+    "name": "uae-validations/currency",
+    "path": "dist/currency/index.mjs",
+    "import": "{ parseAed, formatAed, aedToWords }",
+    "limit": "2.5 kB"
+  },
+  {
+    "name": "uae-validations/vat",
+    "path": "dist/vat/index.mjs",
+    "import": "{ calculateVat }",
+    "limit": "1.5 kB"
+  },
+  {
+    "name": "uae-validations/arabic",
+    "path": "dist/arabic/index.mjs",
+    "import": "{ normalizeArabic, validatePersonName }",
+    "limit": "1.5 kB"
+  },
+  {
+    "name": "uae-validations/address",
+    "path": "dist/address/index.mjs",
+    "import": "{ validateMakani }",
+    "limit": "1 kB"
+  },
+  {
+    "name": "uae-validations/vehicle",
+    "path": "dist/vehicle/index.mjs",
+    "import": "{ validateDubaiPlate }",
+    "limit": "1.2 kB"
+  }
+]
