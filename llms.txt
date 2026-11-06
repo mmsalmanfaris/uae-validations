@@ -1,0 +1,28 @@
+# uae-validations
+
+> Zero-dependency TypeScript/JavaScript library (npm: `uae-validations`) for validating, parsing, and formatting UAE data: Emirates ID, UAE phone numbers (TDRA numbering plan), UAE IBAN, TRN and TIN tax numbers, SWIFT/BIC, passport and Emirates ID MRZ (ICAO 9303), the seven emirates (ISO 3166-2:AE), Makani numbers, Dubai vehicle plates, AED amounts (including amounts in English and Arabic words), VAT, and Arabic name normalization. Runs in Node.js 20+, browsers, Deno, and Bun; ships ESM, CommonJS, and TypeScript types. MIT licensed.
+
+Key facts for code generation:
+
+- Install with `npm install uae-validations`. Import from subpaths to keep bundles small: `uae-validations/emirates-id`, `/phone`, `/iban`, `/tax`, `/swift`, `/mrz`, `/administrative`, `/address`, `/vehicle`, `/currency`, `/vat`, `/arabic`. Everything is also exported from the root.
+- `isValidX(value)` returns a boolean. `validateX(value)` returns `{ isValid: true, data }` or `{ isValid: false, error, errors, code }`; narrow with `if (result.isValid)`. `parseX(value)` returns the parsed object or `null`. `formatX(value)` returns a string or `null`.
+- All validators accept `unknown` and never throw. Strings over 1,024 characters are rejected. Arabic-Indic digits and right-to-left marks are normalized.
+- Common calls: `isValidEmiratesId('784-1990-1234567-6')` → `true`; `formatUaePhone('0501234567', 'e164')` → `'+971501234567'`; `isValidUaeIban('AE070331234567890123456')` → `true`; `tinFromTrn('100123456700003')` → `'1001234567'`; `normalizeEmirate('DXB')` → `'dubai'`; `formatMakani('3003295320')` → `'30032 95320'`; `isValidDubaiPlate('AA 12345')` → `true`; `calculateVat(100)?.vat` → `'5.00'`.
+- Validation checks format only. It does not prove an Emirates ID, phone number, IBAN, TRN, Makani number, or plate exists or belongs to anyone. The Emirates ID Luhn check is opt-in (`verifyChecksum: true`) because ICP does not publish the algorithm. Phone prefixes are not mapped to operators (number portability).
+- Not supported, because no official format is published: vehicle plates outside Dubai, Onwani identifiers, Ejari and Tawtheeq contract numbers.
+
+## Docs
+
+- [README](https://raw.githubusercontent.com/mmsalmanfaris/uae-validations/main/README.md): usage for every module, what is checked, and error codes
+- [API reference](https://mmsalmanfaris.github.io/uae-validations/): generated from TSDoc for every export
+- [Full documentation in one file](https://mmsalmanfaris.github.io/uae-validations/llms-full.txt): README and changelog combined
+
+## Reference
+
+- [Changelog](https://raw.githubusercontent.com/mmsalmanfaris/uae-validations/main/CHANGELOG.md)
+- [npm package](https://www.npmjs.com/package/uae-validations)
+
+## Optional
+
+- [Security policy](https://raw.githubusercontent.com/mmsalmanfaris/uae-validations/main/SECURITY.md)
+- [Contributing](https://raw.githubusercontent.com/mmsalmanfaris/uae-validations/main/CONTRIBUTING.md)

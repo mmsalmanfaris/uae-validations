@@ -18,6 +18,7 @@
   ],
   "out": "api-docs",
   "readme": "README.md",
+  "customCss": "./typedoc.css",
   "includeVersion": true,
   "excludePrivate": true,
   "excludeInternal": true,

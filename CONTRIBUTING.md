@@ -165,6 +165,24 @@ npm run verify
 
 5. Run `npm run verify`.
 
+### Documentation site
+
+The [API reference](https://mmsalmanfaris.github.io/uae-validations/) is generated, never
+written by hand:
+
+- **Pages:** TypeDoc builds one page per module and export from the TSDoc comments in `src/`.
+  The module comment at the top of each `index.ts` becomes the module's overview page.
+- **Landing page and changelog:** `README.md` is the landing page, and `CHANGELOG.md` is
+  published as a document.
+- **Styling:** `typedoc.css` overrides the default TypeDoc theme's colors and layout.
+- **AI-readable files:** `scripts/build-llms.mjs` copies `llms.txt` into the site and builds
+  `llms-full.txt` (`llms.txt`, README, and changelog in one file).
+
+Run `npm run docs` and open `api-docs/index.html` to preview. The build fails if an export has
+no TSDoc comment or a `{@link}` is broken. The **API docs** workflow publishes the site to GitHub
+Pages on every push to `main`, so the site always matches the latest release. If you change the
+public API, update `llms.txt` too.
+
 ## Pull requests
 
 1. Push your branch to your fork and open a pull request **into `development`**.
@@ -276,6 +294,7 @@ One-time repository settings, applied by `scripts/setup-github.sh` with the GitH
 - Allow squash merges (for `development`) and merge commits (for releases), with squash commits
   using the pull request title.
 - Enable Discussions, private vulnerability reporting, and Dependabot security updates.
+- Enable GitHub Pages with GitHub Actions as the source, for the API docs.
 - For publishing: add an `npm` environment and configure npm Trusted Publishing for
   `.github/workflows/release.yml`.
 

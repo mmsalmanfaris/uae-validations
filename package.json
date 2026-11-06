@@ -181,7 +181,8 @@
   },
   "files": [
     "dist",
-    "CHANGELOG.md"
+    "CHANGELOG.md",
+    "llms.txt"
   ],
   "sideEffects": false,
   "engines": {
@@ -198,7 +199,7 @@
     "test:coverage": "vitest run --coverage",
     "lint:package": "npm run build && publint --strict && attw --pack .",
     "size": "npm run build && size-limit",
-    "docs": "typedoc",
+    "docs": "typedoc && node scripts/build-llms.mjs",
     "check:package": "npm run build && node scripts/check-package.mjs",
     "prepublishOnly": "npm run typecheck && npm run lint && npm run format:check && npm run test:coverage && npm run lint:package && npm run size && node scripts/check-package.mjs",
     "verify": "npm run typecheck && npm run lint && npm run format:check && npm run docs && npm run test:coverage && npm run lint:package && npm run size && npm run check:package"

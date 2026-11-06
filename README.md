@@ -9,6 +9,10 @@ contract.
 - Arabic-Indic digits (`٠١٢٣`) and right-to-left marks are normalized automatically
 - Every country-specific rule cites an official UAE source
 
+**Documentation:** [API reference](https://mmsalmanfaris.github.io/uae-validations/), generated
+from the TSDoc on every export. AI tools can read [llms.txt](https://mmsalmanfaris.github.io/uae-validations/llms.txt)
+or the whole documentation in [llms-full.txt](https://mmsalmanfaris.github.io/uae-validations/llms-full.txt).
+
 > **Status: 0.1.0, pre-release.** All modules below are implemented and tested. See the
 > [roadmap](#roadmap) for what comes next.
 

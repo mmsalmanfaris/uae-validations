@@ -37,6 +37,14 @@ gh api -X PUT "repos/$REPO/vulnerability-alerts" >/dev/null
 gh api -X PUT "repos/$REPO/automated-security-fixes" >/dev/null
 echo "Enabled private vulnerability reporting and Dependabot alerts and security updates"
 
+# GitHub Pages, deployed by .github/workflows/docs.yml (source: GitHub Actions).
+if gh api "repos/$REPO/pages" >/dev/null 2>&1; then
+  gh api -X PUT "repos/$REPO/pages" -f build_type=workflow >/dev/null
+else
+  gh api -X POST "repos/$REPO/pages" -f build_type=workflow >/dev/null
+fi
+echo "Enabled GitHub Pages (source: GitHub Actions)"
+
 # 3. Labels used by the issue forms and CONTRIBUTING.md.
 label() { gh label create "$1" --repo "$REPO" --color "$2" --description "$3" --force >/dev/null; }
 label triage 'fbca04' 'New; not reviewed yet'
@@ -93,5 +101,4 @@ cat <<'EOF'
 Done. Remaining manual steps:
   - npm: configure Trusted Publishing for this repository and .github/workflows/release.yml.
   - GitHub: Settings > Environments > create "npm" (optionally require reviewers).
-  - GitHub: Settings > Pages > Source: GitHub Actions (for the API docs workflow).
 EOF
