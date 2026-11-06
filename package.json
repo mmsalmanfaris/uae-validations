@@ -200,7 +200,8 @@
     "size": "npm run build && size-limit",
     "docs": "typedoc",
     "check:package": "npm run build && node scripts/check-package.mjs",
-    "prepublishOnly": "npm run typecheck && npm run lint && npm run test:coverage && npm run lint:package && node scripts/check-package.mjs"
+    "prepublishOnly": "npm run typecheck && npm run lint && npm run format:check && npm run test:coverage && npm run lint:package && npm run size && node scripts/check-package.mjs",
+    "verify": "npm run typecheck && npm run lint && npm run format:check && npm run docs && npm run test:coverage && npm run lint:package && npm run size && npm run check:package"
   },
   "repository": {
     "type": "git",

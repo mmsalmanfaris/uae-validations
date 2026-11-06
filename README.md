@@ -330,6 +330,16 @@ Next:
 | `i18n`     | Arabic messages for every error code                                      |
 | `schema`   | Zod, Yup, and React Hook Form adapters                                    |
 
+## Contributing
+
+Contributions are welcome. Read [CONTRIBUTING.md](CONTRIBUTING.md) for the branch flow
+(pull requests target `development`), the data-source policy, and the release process.
+
+- Found a wrong result? [Open a bug report](https://github.com/mmsalmanfaris/uae-validations/issues/new?template=bug_report.yml).
+- Need a new UAE format validated? [Request a data source](https://github.com/mmsalmanfaris/uae-validations/issues/new?template=data_source_request.yml) with a link to the official specification.
+- A rule or source is out of date? [Report a data correction](https://github.com/mmsalmanfaris/uae-validations/issues/new?template=data_correction.yml).
+- Security problem? Report it privately; see [SECURITY.md](SECURITY.md).
+
 ## License
 
 MIT © M.M. Salman Faris
