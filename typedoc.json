@@ -1,0 +1,87 @@
+{
+  "$schema": "https://typedoc.org/schema.json",
+  "name": "uae-validations",
+  "entryPoints": [
+    "src/emirates-id/index.ts",
+    "src/phone/index.ts",
+    "src/iban/index.ts",
+    "src/tax/index.ts",
+    "src/swift/index.ts",
+    "src/mrz/index.ts",
+    "src/administrative/index.ts",
+    "src/currency/index.ts",
+    "src/vat/index.ts",
+    "src/arabic/index.ts",
+    "src/address/index.ts",
+    "src/vehicle/index.ts",
+    "src/index.ts"
+  ],
+  "out": "api-docs",
+  "hostedBaseUrl": "https://mmsalmanfaris.github.io/uae-validations/",
+  "readme": "README.md",
+  "customCss": "./typedoc.css",
+  "includeVersion": true,
+  "excludePrivate": true,
+  "excludeInternal": true,
+  "sourceLinkTemplate": "https://github.com/mmsalmanfaris/uae-validations/blob/main/{path}#L{line}",
+  "validation": {
+    "notExported": true,
+    "invalidLink": true,
+    "notDocumented": true
+  },
+  "requiredToBeDocumented": ["Function", "Class", "Interface", "TypeAlias", "Variable"],
+  "intentionallyNotExported": [],
+  "treatWarningsAsErrors": true,
+  "navigationLinks": {
+    "GitHub": "https://github.com/mmsalmanfaris/uae-validations",
+    "npm": "https://www.npmjs.com/package/uae-validations",
+    "Changelog": "https://mmsalmanfaris.github.io/uae-validations/documents/CHANGELOG.html"
+  },
+  "sidebarLinks": {
+    "Report an issue": "https://github.com/mmsalmanfaris/uae-validations/issues/new/choose"
+  },
+  "projectDocuments": ["CHANGELOG.md"],
+  "searchInComments": true,
+  "searchInDocuments": true,
+  "groupOrder": ["Functions", "Classes", "Interfaces", "Type Aliases", "Variables", "*"],
+  "navigation": {
+    "includeCategories": false,
+    "includeGroups": false,
+    "includeFolders": true,
+    "compactFolders": true,
+    "excludeReferences": true
+  },
+  "headings": {
+    "readme": false,
+    "document": true
+  },
+  "sort": ["kind", "alphabetical"],
+  "kindSortOrder": [
+    "Document",
+    "Project",
+    "Module",
+    "Namespace",
+    "Function",
+    "Class",
+    "Interface",
+    "TypeAlias",
+    "Variable",
+    "Enum",
+    "EnumMember",
+    "Constructor",
+    "Property",
+    "Method",
+    "CallSignature",
+    "IndexSignature",
+    "ConstructorSignature",
+    "Accessor",
+    "GetSignature",
+    "SetSignature",
+    "TypeLiteral",
+    "TypeParameter",
+    "Parameter",
+    "Reference"
+  ],
+  "customFooterHtml": "<script type=\"application/ld+json\">{\"@context\":\"https://schema.org\",\"@type\":\"SoftwareSourceCode\",\"name\":\"uae-validations\",\"description\":\"Zero-dependency TypeScript and JavaScript library for validating, parsing, and formatting UAE data: Emirates ID, UAE phone numbers, IBAN, TRN and TIN, SWIFT/BIC, MRZ, emirates, Makani numbers, Dubai vehicle plates, AED, VAT, and Arabic names.\",\"url\":\"https://mmsalmanfaris.github.io/uae-validations/\",\"codeRepository\":\"https://github.com/mmsalmanfaris/uae-validations\",\"programmingLanguage\":[\"TypeScript\",\"JavaScript\"],\"runtimePlatform\":\"Node.js\",\"license\":\"https://opensource.org/licenses/MIT\",\"author\":{\"@type\":\"Person\",\"name\":\"M.M. Salman Faris\",\"url\":\"https://github.com/mmsalmanfaris\"},\"keywords\":[\"Emirates ID validation\",\"UAE phone number validation\",\"UAE IBAN\",\"TRN\",\"MRZ\",\"AED\"]}</script>",
+  "customFooterHtmlDisableWrapper": true
+}

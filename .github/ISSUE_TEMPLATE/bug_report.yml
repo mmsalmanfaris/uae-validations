@@ -1,0 +1,59 @@
+name: Bug report
+description: A validator, parser, or formatter returns the wrong result or throws.
+labels: [bug, triage]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Report security problems (for example, input that bypasses a check) privately. See [SECURITY.md](https://github.com/mmsalmanfaris/uae-validations/blob/main/SECURITY.md).
+
+        **Do not paste real Emirates ID, phone, IBAN, TRN, passport, or plate numbers.** Use made-up values that reproduce the problem.
+
+        If the rule itself is wrong (the official format differs from what the library checks), use **Data source correction** instead.
+  - type: input
+    id: version
+    attributes:
+      label: Package version
+      placeholder: 0.1.0
+    validations:
+      required: true
+  - type: input
+    id: function
+    attributes:
+      label: Function
+      placeholder: validateUaePhone
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction
+      description: The smallest call that shows the problem.
+      render: ts
+      placeholder: |
+        import { validateUaePhone } from 'uae-validations/phone';
+        validateUaePhone('050 123 4567');
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected and actual result
+      placeholder: |
+        Expected: { isValid: true, ... }
+        Actual: { isValid: false, code: 'PHONE_INVALID_FORMAT', ... }
+    validations:
+      required: true
+  - type: input
+    id: runtime
+    attributes:
+      label: Runtime
+      description: Node.js version, browser, Deno, or Bun; and ESM or CommonJS.
+      placeholder: Node 22.11, ESM
+  - type: checkboxes
+    id: confirm
+    attributes:
+      label: Confirmation
+      options:
+        - label: The values in this issue are made up, not real personal data.
+          required: true
