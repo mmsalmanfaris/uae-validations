@@ -1,0 +1,53 @@
+name: PR policy
+
+# Enforces the branch flow in CONTRIBUTING.md:
+#   feature branches -> development -> release/x.y.z or hotfix/x.y.z -> main
+# and checks that the PR title is a valid commit subject, because squash merges use it.
+on:
+  pull_request:
+    types: [opened, edited, reopened, synchronize]
+
+permissions: {}
+
+jobs:
+  branch:
+    name: Target branch
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check source and target branches
+        env:
+          BASE: ${{ github.base_ref }}
+          HEAD: ${{ github.head_ref }}
+        run: |
+          case "$BASE" in
+            main)
+              case "$HEAD" in
+                release/*|hotfix/*) ;;
+                *)
+                  echo "::error::PRs into main must come from release/x.y.z or hotfix/x.y.z. Target development instead."
+                  exit 1 ;;
+              esac ;;
+            development) ;;
+            *)
+              echo "::error::PRs must target development (or main for release/ and hotfix/ branches), not $BASE."
+              exit 1 ;;
+          esac
+
+  title:
+    name: PR title
+    runs-on: ubuntu-latest
+    if: github.actor != 'dependabot[bot]'
+    steps:
+      - name: Check the title is a commit subject
+
+        env:
+          TITLE: ${{ github.event.pull_request.title }}
+        run: |
+          node -e '
+            const title = process.env.TITLE;
+            const pattern = /^(feat|fix|perf|refactor|test|docs|style|build|ci|chore|revert)(\([a-z0-9-]+\))?!?: \p{Extended_Pictographic}️? \S/u;
+            if (!pattern.test(title)) {
+              console.log("::error::PR title must look like \"feat: ✨ add Makani validation\". See Commit messages in CONTRIBUTING.md.");
+              process.exit(1);
+            }
+          '

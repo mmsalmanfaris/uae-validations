@@ -1,0 +1,80 @@
+name: Data source request
+description: Ask for a new UAE identifier, format, or rule to be validated, backed by an official source.
+title: 'Data source: '
+labels: [data-source, triage]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Every rule in this library comes from an official UAE authority (for example ICP, TDRA, CBUAE, FTA, RTA, Dubai Municipality, DMT, or u.ae) or an international standard (ISO, ICAO, SWIFT). See [Data sources](https://github.com/mmsalmanfaris/uae-validations/blob/main/CONTRIBUTING.md#data-sources) in CONTRIBUTING.md.
+
+        Blog posts, news articles, Wikipedia, and sample documents are not enough on their own. If no official source exists, say so below; the rule may still be added as an opt-in check, clearly labelled as unofficial.
+  - type: input
+    id: item
+    attributes:
+      label: What should be validated
+      placeholder: Sharjah vehicle plate numbers
+    validations:
+      required: true
+  - type: dropdown
+    id: scope
+    attributes:
+      label: Scope
+      options:
+        - Federal (all emirates)
+        - Abu Dhabi
+        - Dubai
+        - Sharjah
+        - Ajman
+        - Umm Al Quwain
+        - Ras Al Khaimah
+        - Fujairah
+        - Free zone
+        - International standard
+    validations:
+      required: true
+  - type: input
+    id: authority
+    attributes:
+      label: Issuing authority
+      description: The body that issues the identifier or defines the format.
+      placeholder: Sharjah Police General Command
+    validations:
+      required: true
+  - type: textarea
+    id: sources
+    attributes:
+      label: Official sources
+      description: |
+        One link per line to the law, regulation, specification, or government page that defines the format. Add the page or section number for long documents.
+        Write "none found" if you could not find one.
+      placeholder: https://example.gov.ae/... (section 3.2)
+    validations:
+      required: true
+  - type: textarea
+    id: rule
+    attributes:
+      label: The rule, as the source states it
+      description: Quote the relevant text. Then describe length, allowed characters, check digits, and any separators or display format.
+    validations:
+      required: true
+  - type: textarea
+    id: examples
+    attributes:
+      label: Example values
+      description: Made-up values only, or examples printed in the official source itself. Never real personal data.
+      placeholder: |
+        Valid: ...
+        Invalid: ... (because ...)
+  - type: textarea
+    id: use-case
+    attributes:
+      label: Use case
+      description: Where you need this check, such as a signup form, KYC flow, or data import.
+  - type: checkboxes
+    id: confirm
+    attributes:
+      label: Confirmation
+      options:
+        - label: The example values are made up or come from the official source, not from a real person or vehicle.
+          required: true

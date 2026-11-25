@@ -1,0 +1,108 @@
+/* Overrides for the default TypeDoc theme. Only the theme's own variables are changed, so the
+   light, dark, and OS-preference modes all keep working. */
+
+:root {
+  /* Green from the UAE flag for light mode; a lighter green for dark backgrounds. */
+  --light-color-link: #00732f;
+  --light-color-accent: #d3e6da;
+  --light-color-active-menu-item: #e6f2ea;
+  --light-color-background-secondary: #f7faf8;
+  --light-color-focus-outline: #00732f;
+
+  --dark-color-link: #7fd6a2;
+  --dark-color-accent: #25392d;
+  --dark-color-active-menu-item: #22352a;
+  --dark-color-focus-outline: #7fd6a2;
+
+  --dim-toolbar-contents-height: 3rem;
+}
+
+/* Header: project name stands out; navigation links read as buttons. */
+.tsd-page-toolbar {
+  border-bottom: 1px solid var(--color-accent);
+}
+.tsd-page-toolbar .title {
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+#tsd-toolbar-links a {
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+}
+#tsd-toolbar-links a:hover {
+  background: var(--color-active-menu-item);
+  text-decoration: none;
+}
+
+/* Comfortable reading width and line height for prose. */
+.col-content {
+  line-height: 1.65;
+}
+.tsd-panel.tsd-typography,
+.tsd-comment.tsd-typography {
+  max-width: 52rem;
+}
+.tsd-typography h2 {
+  margin-top: 2.25rem;
+  padding-bottom: 0.35rem;
+  border-bottom: 1px solid var(--color-accent);
+}
+
+/* Code: rounded, bordered, and easier to scan. */
+.tsd-typography pre,
+.col-content pre {
+  border: 1px solid var(--color-accent);
+  border-radius: 0.6rem;
+  padding: 0.9rem 1rem;
+  line-height: 1.5;
+}
+.tsd-typography code:not(pre code) {
+  padding: 0.1rem 0.35rem;
+  border-radius: 0.3rem;
+  background: var(--color-background-secondary);
+}
+
+/* Tables (task table, data sources, input rules): borders and zebra rows. */
+.tsd-typography table {
+  border-collapse: collapse;
+  width: 100%;
+  display: table;
+  font-size: 0.95em;
+}
+.tsd-typography th,
+.tsd-typography td {
+  border: 1px solid var(--color-accent);
+  padding: 0.5rem 0.75rem;
+  vertical-align: top;
+}
+.tsd-typography th {
+  background: var(--color-background-secondary);
+  text-align: left;
+}
+.tsd-typography tr:nth-child(even) td {
+  background: var(--color-background-secondary);
+}
+
+/* Function signatures: a clear card above each description. */
+.tsd-signature {
+  border: 1px solid var(--color-accent);
+  border-radius: 0.6rem;
+  padding: 0.75rem 1rem;
+}
+
+/* Sidebar: highlight the current page more clearly. */
+.tsd-navigation a.current,
+.tsd-page-navigation a.current {
+  font-weight: 600;
+}
+
+/* Wider left sidebar on large screens so module names such as
+   "uae-validations/administrative" fit on one line. */
+@media (min-width: 1200px) {
+  .container-main {
+    grid-template-columns: minmax(18.5rem, 1fr) minmax(0, 2.5fr) minmax(0, 17rem);
+  }
+}
+.tsd-navigation a {
+  font-size: 0.95rem;
+}

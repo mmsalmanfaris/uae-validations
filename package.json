@@ -1,41 +1,278 @@
 {
   "name": "uae-validations",
   "version": "0.1.0",
-  "description": "Zero-dependency TypeScript validators for UAE identifiers, phone numbers, IBANs, and tax numbers.",
-  "license": "MIT",
-  "type": "module",
-  "sideEffects": false,
-  "engines": { "node": ">=20" },
-  "files": ["dist", "README.md", "LICENSE", "CHANGELOG.md"],
-  "main": "./dist/index.cjs",
-  "module": "./dist/index.js",
+  "description": "Validate, parse, and format UAE data in TypeScript and JavaScript with zero dependencies: Emirates ID, UAE phone numbers, IBAN, TRN and TIN, SWIFT/BIC, passport and ID-card MRZ, emirates, Makani numbers, Dubai vehicle plates, AED amounts and words, VAT, and Arabic names.",
+  "type": "commonjs",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
+  "typesVersions": {
+    "*": {
+      "emirates-id": [
+        "./dist/emirates-id/index.d.ts"
+      ],
+      "phone": [
+        "./dist/phone/index.d.ts"
+      ],
+      "iban": [
+        "./dist/iban/index.d.ts"
+      ],
+      "tax": [
+        "./dist/tax/index.d.ts"
+      ],
+      "swift": [
+        "./dist/swift/index.d.ts"
+      ],
+      "mrz": [
+        "./dist/mrz/index.d.ts"
+      ],
+      "administrative": [
+        "./dist/administrative/index.d.ts"
+      ],
+      "currency": [
+        "./dist/currency/index.d.ts"
+      ],
+      "vat": [
+        "./dist/vat/index.d.ts"
+      ],
+      "arabic": [
+        "./dist/arabic/index.d.ts"
+      ],
+      "address": [
+        "./dist/address/index.d.ts"
+      ],
+      "vehicle": [
+        "./dist/vehicle/index.d.ts"
+      ]
+    }
+  },
   "exports": {
-    ".": { "types": "./dist/index.d.ts", "import": "./dist/index.js", "require": "./dist/index.cjs" },
-    "./emirates-id": { "types": "./dist/emirates-id/index.d.ts", "import": "./dist/emirates-id/index.js", "require": "./dist/emirates-id/index.cjs" },
-    "./phone": { "types": "./dist/phone/index.d.ts", "import": "./dist/phone/index.js", "require": "./dist/phone/index.cjs" },
-    "./iban": { "types": "./dist/iban/index.d.ts", "import": "./dist/iban/index.js", "require": "./dist/iban/index.cjs" },
-    "./tax": { "types": "./dist/tax/index.d.ts", "import": "./dist/tax/index.js", "require": "./dist/tax/index.cjs" },
-    "./administrative": { "types": "./dist/administrative/index.d.ts", "import": "./dist/administrative/index.js", "require": "./dist/administrative/index.cjs" },
-    "./address": { "types": "./dist/address/index.d.ts", "import": "./dist/address/index.js", "require": "./dist/address/index.cjs" },
-    "./currency": { "types": "./dist/currency/index.d.ts", "import": "./dist/currency/index.js", "require": "./dist/currency/index.cjs" },
-    "./privacy": { "types": "./dist/privacy/index.d.ts", "import": "./dist/privacy/index.js", "require": "./dist/privacy/index.cjs" },
-    "./schema": { "types": "./dist/schema/index.d.ts", "import": "./dist/schema/index.js", "require": "./dist/schema/index.cjs" },
-    "./i18n": { "types": "./dist/i18n/index.d.ts", "import": "./dist/i18n/index.js", "require": "./dist/i18n/index.cjs" },
-    "./dates": { "types": "./dist/dates/index.d.ts", "import": "./dist/dates/index.js", "require": "./dist/dates/index.cjs" },
-    "./metadata": { "types": "./dist/metadata/index.d.ts", "import": "./dist/metadata/index.js", "require": "./dist/metadata/index.cjs" },
+    ".": {
+      "import": {
+        "types": "./dist/index.d.mts",
+        "default": "./dist/index.mjs"
+      },
+      "require": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      }
+    },
+    "./emirates-id": {
+      "import": {
+        "types": "./dist/emirates-id/index.d.mts",
+        "default": "./dist/emirates-id/index.mjs"
+      },
+      "require": {
+        "types": "./dist/emirates-id/index.d.ts",
+        "default": "./dist/emirates-id/index.js"
+      }
+    },
+    "./phone": {
+      "import": {
+        "types": "./dist/phone/index.d.mts",
+        "default": "./dist/phone/index.mjs"
+      },
+      "require": {
+        "types": "./dist/phone/index.d.ts",
+        "default": "./dist/phone/index.js"
+      }
+    },
+    "./iban": {
+      "import": {
+        "types": "./dist/iban/index.d.mts",
+        "default": "./dist/iban/index.mjs"
+      },
+      "require": {
+        "types": "./dist/iban/index.d.ts",
+        "default": "./dist/iban/index.js"
+      }
+    },
+    "./tax": {
+      "import": {
+        "types": "./dist/tax/index.d.mts",
+        "default": "./dist/tax/index.mjs"
+      },
+      "require": {
+        "types": "./dist/tax/index.d.ts",
+        "default": "./dist/tax/index.js"
+      }
+    },
+    "./swift": {
+      "import": {
+        "types": "./dist/swift/index.d.mts",
+        "default": "./dist/swift/index.mjs"
+      },
+      "require": {
+        "types": "./dist/swift/index.d.ts",
+        "default": "./dist/swift/index.js"
+      }
+    },
+    "./mrz": {
+      "import": {
+        "types": "./dist/mrz/index.d.mts",
+        "default": "./dist/mrz/index.mjs"
+      },
+      "require": {
+        "types": "./dist/mrz/index.d.ts",
+        "default": "./dist/mrz/index.js"
+      }
+    },
+    "./administrative": {
+      "import": {
+        "types": "./dist/administrative/index.d.mts",
+        "default": "./dist/administrative/index.mjs"
+      },
+      "require": {
+        "types": "./dist/administrative/index.d.ts",
+        "default": "./dist/administrative/index.js"
+      }
+    },
+    "./currency": {
+      "import": {
+        "types": "./dist/currency/index.d.mts",
+        "default": "./dist/currency/index.mjs"
+      },
+      "require": {
+        "types": "./dist/currency/index.d.ts",
+        "default": "./dist/currency/index.js"
+      }
+    },
+    "./vat": {
+      "import": {
+        "types": "./dist/vat/index.d.mts",
+        "default": "./dist/vat/index.mjs"
+      },
+      "require": {
+        "types": "./dist/vat/index.d.ts",
+        "default": "./dist/vat/index.js"
+      }
+    },
+    "./arabic": {
+      "import": {
+        "types": "./dist/arabic/index.d.mts",
+        "default": "./dist/arabic/index.mjs"
+      },
+      "require": {
+        "types": "./dist/arabic/index.d.ts",
+        "default": "./dist/arabic/index.js"
+      }
+    },
+    "./address": {
+      "import": {
+        "types": "./dist/address/index.d.mts",
+        "default": "./dist/address/index.mjs"
+      },
+      "require": {
+        "types": "./dist/address/index.d.ts",
+        "default": "./dist/address/index.js"
+      }
+    },
+    "./vehicle": {
+      "import": {
+        "types": "./dist/vehicle/index.d.mts",
+        "default": "./dist/vehicle/index.mjs"
+      },
+      "require": {
+        "types": "./dist/vehicle/index.d.ts",
+        "default": "./dist/vehicle/index.js"
+      }
+    },
     "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "CHANGELOG.md",
+    "llms.txt"
+  ],
+  "sideEffects": false,
+  "engines": {
+    "node": ">=20"
   },
   "scripts": {
     "build": "tsup",
+    "typecheck": "tsc -p tsconfig.test.json",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
     "test": "vitest run",
     "test:watch": "vitest",
-    "typecheck": "tsc --noEmit",
-    "check": "npm run typecheck && npm test && npm run build"
+    "test:coverage": "vitest run --coverage",
+    "lint:package": "npm run build && publint --strict && attw --pack .",
+    "size": "npm run build && size-limit",
+    "docs": "typedoc && node scripts/postprocess-docs.mjs && node scripts/build-llms.mjs",
+    "check:package": "npm run build && node scripts/check-package.mjs",
+    "prepublishOnly": "npm run typecheck && npm run lint && npm run format:check && npm run test:coverage && npm run lint:package && npm run size && node scripts/check-package.mjs",
+    "verify": "npm run typecheck && npm run lint && npm run format:check && npm run docs && npm run test:coverage && npm run lint:package && npm run size && npm run check:package"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mmsalmanfaris/uae-validations.git"
+  },
+  "bugs": {
+    "url": "https://github.com/mmsalmanfaris/uae-validations/issues"
+  },
+  "homepage": "https://mmsalmanfaris.github.io/uae-validations/",
+  "keywords": [
+    "uae",
+    "united-arab-emirates",
+    "emirates-id",
+    "emirates-id-validator",
+    "eid",
+    "validation",
+    "uae-phone",
+    "uae-mobile",
+    "e164",
+    "validator",
+    "kyc",
+    "form-validation",
+    "arabic",
+    "typescript",
+    "zero-dependency",
+    "iban",
+    "uae-iban",
+    "trn",
+    "tin",
+    "vat",
+    "swift",
+    "bic",
+    "mrz",
+    "icao-9303",
+    "passport",
+    "emirates",
+    "aed",
+    "dirham",
+    "amount-to-words",
+    "arabic-normalization",
+    "makani",
+    "vehicle-plate",
+    "dubai",
+    "uae-validation",
+    "phone-validation",
+    "iban-validation",
+    "zod"
+  ],
+  "author": "M.M. Salman Faris <mmsalmanfaris@outlook.com>",
+  "license": "MIT",
   "devDependencies": {
-    "tsup": "^8.5.0",
-    "typescript": "^5.9.3",
-    "vitest": "^4.1.12"
+    "@arethetypeswrong/cli": "^0.18.5",
+    "@eslint/js": "^10.0.1",
+    "@size-limit/preset-small-lib": "^14.2.0",
+    "@types/node": "^22.13.1",
+    "@vitest/coverage-v8": "^4.1.11",
+    "eslint": "^10.12.0",
+    "eslint-config-prettier": "^10.1.8",
+    "fast-check": "^4.10.2",
+    "globals": "^17.13.0",
+    "prettier": "^3.9.10",
+    "publint": "^0.3.25",
+    "size-limit": "^14.2.0",
+    "tsup": "^8.3.6",
+    "typedoc": "^0.28.20",
+    "typescript": "^5.7.3",
+    "typescript-eslint": "^8.71.2",
+    "vitest": "^4.1.11"
+  },
+  "overrides": {
+    "esbuild": "^0.28.2"
   }
 }

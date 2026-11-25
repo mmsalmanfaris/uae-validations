@@ -1,0 +1,40 @@
+name: Data source correction
+description: A rule, code list, or source link is wrong, out of date, or no longer reachable.
+title: 'Data correction: '
+labels: [data-correction, triage]
+body:
+  - type: dropdown
+    id: area
+    attributes:
+      label: What is wrong
+      options:
+        - Emirates ID format
+        - Mobile prefixes or landline area codes (phone)
+        - IBAN structure
+        - TRN or TIN structure
+        - BIC structure
+        - MRZ layout or check digits
+        - Emirate names, ISO codes, or aliases (administrative)
+        - Makani number (address)
+        - Dubai plate format (vehicle)
+        - AED rules or amounts in words (currency)
+        - VAT rate or thresholds
+        - Arabic normalization or names
+        - A source link is broken or moved
+    validations:
+      required: true
+  - type: textarea
+    id: change
+    attributes:
+      label: What should change
+      description: The current behaviour and the correct behaviour.
+      placeholder: TDRA has allocated mobile code 057; isValidUaeMobile rejects 057 numbers.
+    validations:
+      required: true
+  - type: textarea
+    id: source
+    attributes:
+      label: Official source
+      description: A link to the issuing authority or standard that shows the correct rule, with the date it was published or updated if shown. Each module's current sources are exported as `*_SOURCES` (for example `PHONE_SOURCES`).
+    validations:
+      required: true
