@@ -29,8 +29,9 @@ export function formatEmiratesId(
 }
 
 /**
- * Masks an Emirates ID for display or logging, keeping the `784` prefix and the last
- * few digits. The birth year is hidden by default because it is personal data.
+ * Masks an Emirates ID for display, or for logs where a reduced identifier is acceptable,
+ * keeping the `784` prefix and the last few digits. The birth year is hidden by default because
+ * it is personal data. A masked ID is still personal data, not anonymised.
  *
  * @param input - Emirates ID in any accepted layout.
  * @param options - `{ maskChar, visibleDigits }` plus the usual `{ referenceDate, verifyChecksum }`.

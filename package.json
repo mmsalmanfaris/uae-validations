@@ -1,7 +1,7 @@
 {
   "name": "uae-validations",
   "version": "0.1.0",
-  "description": "Validate, parse, and format UAE data in TypeScript and JavaScript with zero dependencies: Emirates ID, UAE phone numbers, IBAN, TRN and TIN, SWIFT/BIC, passport and ID-card MRZ, emirates, Makani numbers, Dubai vehicle plates, AED amounts and words, VAT, and Arabic names.",
+  "description": "UAE data validation for TypeScript and JavaScript, zero dependencies: Emirates ID, UAE mobile, landline, and toll-free numbers, IBAN, TRN and TIN, SWIFT/BIC, passport and ID-card MRZ, emirates, Makani numbers, Dubai plates, AED with the Dirham sign and amounts in words, VAT, and Arabic error messages.",
   "type": "commonjs",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -43,6 +43,9 @@
       ],
       "vehicle": [
         "./dist/vehicle/index.d.ts"
+      ],
+      "i18n": [
+        "./dist/i18n/index.d.ts"
       ]
     }
   },
@@ -177,6 +180,16 @@
         "default": "./dist/vehicle/index.js"
       }
     },
+    "./i18n": {
+      "import": {
+        "types": "./dist/i18n/index.d.mts",
+        "default": "./dist/i18n/index.mjs"
+      },
+      "require": {
+        "types": "./dist/i18n/index.d.ts",
+        "default": "./dist/i18n/index.js"
+      }
+    },
     "./package.json": "./package.json"
   },
   "files": [
@@ -249,7 +262,21 @@
     "uae-validation",
     "phone-validation",
     "iban-validation",
-    "zod"
+    "zod",
+    "toll-free",
+    "i18n",
+    "emirates-id-validation",
+    "uae-phone-number",
+    "uae-mobile-number",
+    "uae-trn",
+    "trn-validation",
+    "uae-vat",
+    "dirham-symbol",
+    "arabic-error-messages",
+    "abu-dhabi",
+    "react-hook-form",
+    "yup",
+    "form-validator"
   ],
   "author": "M.M. Salman Faris <mmsalmanfaris@outlook.com>",
   "license": "MIT",

@@ -82,7 +82,8 @@ function build(
  * prefixes, an optional `(0)` after the country code, and spaces, hyphens, dots, or
  * parentheses as separators. Arabic-Indic digits are normalized first.
  *
- * Toll-free (800), fixed-cost (600), premium (900), and short codes are not supported yet.
+ * Toll-free (800), fixed-cost (600), and other non-geographic numbers are parsed by
+ * {@link parseUaeServiceNumber}. Short codes are not supported.
  *
  * @param input - Phone number. Non-string input returns `null` without throwing.
  * @param options - Optional `{ mobilePrefixes }`.

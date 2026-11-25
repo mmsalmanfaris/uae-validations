@@ -15,6 +15,7 @@ export default defineConfig({
     'src/arabic/index.ts',
     'src/address/index.ts',
     'src/vehicle/index.ts',
+    'src/i18n/index.ts',
   ],
   format: ['cjs', 'esm'],
   dts: true,

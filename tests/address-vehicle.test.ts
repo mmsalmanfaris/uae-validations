@@ -121,6 +121,7 @@ describe('parseDubaiPlate', () => {
     ['A_1', 'PLATE_INVALID_FORMAT'],
     ['A 1 B', 'PLATE_INVALID_FORMAT'],
     ['ABC 123', 'PLATE_INVALID_CODE'],
+    ['AB 123', 'PLATE_INVALID_CODE'],
     ['Dubai 123', 'PLATE_INVALID_CODE'],
     ['A 123456', 'PLATE_INVALID_NUMBER'],
     ['A 0', 'PLATE_INVALID_NUMBER'],

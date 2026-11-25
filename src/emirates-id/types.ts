@@ -23,7 +23,10 @@ export interface EmiratesIdInfo {
   formatted: string;
   /** Leading `'784'`, the ISO 3166-1 numeric code for the UAE. */
   countryCode: '784';
-  /** Four-digit year field (the holder's year of birth, per ICP). */
+  /**
+   * Four-digit year field, usually the holder's year of birth. ICP's briefing labels it `Bdate`,
+   * but EIDA (now ICP) has said it does not necessarily match, so do not infer age from it.
+   */
   year: number;
   /** Seven-digit serial segment. */
   serial: string;

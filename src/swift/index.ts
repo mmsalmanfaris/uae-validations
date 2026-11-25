@@ -47,9 +47,15 @@ export interface BicInfo {
   locationCode: string;
   /** Three-character branch code, or `null` for 8-character BICs. */
   branchCode: string | null;
-  /** `true` when the BIC identifies the head office (no branch code, or `XXX`). */
+  /**
+   * `true` when the BIC identifies the head office (no branch code, or `XXX`). This is a SWIFT
+   * network convention, not part of ISO 9362:2022.
+   */
   isPrimaryOffice: boolean;
-  /** `true` when the second character of the location code is `0`, which marks a test and training BIC. */
+  /**
+   * `true` when the second character of the location code is `0`. On the SWIFT network this
+   * marks a test and training BIC; it is a network convention, not part of ISO 9362:2022.
+   */
   isTestBic: boolean;
 }
 

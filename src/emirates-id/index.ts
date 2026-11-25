@@ -3,8 +3,9 @@
  *
  * Import from `uae-validations/emirates-id`, or from the package root.
  *
- * An Emirates ID is 15 digits, `784-YYYY-NNNNNNN-C`: the UAE country code, the
- * holder's year of birth, a 7-digit serial, and a check digit. ICP does not publish
+ * An Emirates ID is 15 digits, `784-YYYY-NNNNNNN-C`: the UAE country code, a year field
+ * (usually, but not necessarily, the holder's year of birth), a 7-digit serial, and a check
+ * digit. ICP does not publish
  * the check-digit algorithm, so Luhn verification is opt-in via `verifyChecksum`.
  *
  * @example

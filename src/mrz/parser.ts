@@ -151,8 +151,12 @@ export function inspectMrz(input: unknown, options?: MrzOptions): MrzInspection 
   const raw = slice(lines);
   if (raw === null) return { code: 'MRZ_INVALID_FORMAT' };
 
-  const sexMap = { M: 'male', F: 'female', '<': 'unspecified', X: 'unspecified' } as const;
-  const sex = sexMap[raw.sex as keyof typeof sexMap];
+  // ICAO Doc 9303 Parts 4-6: F = female, M = male, < = unspecified. X belongs to the visual zone.
+  const sexMap = { M: 'male', F: 'female', '<': 'unspecified' } as const;
+  const sex =
+    raw.sex === 'X' && options?.allowSexX === true
+      ? 'unspecified'
+      : sexMap[raw.sex as keyof typeof sexMap];
   if (sex === undefined) return { code: 'MRZ_INVALID_FORMAT' };
 
   // Long document numbers (TD1/TD2): `<` in the check position, overflow in the optional data.
@@ -224,7 +228,7 @@ export function inspectMrz(input: unknown, options?: MrzOptions): MrzInspection 
  * (document number, birth date, expiry date, personal number, composite) must match.
  *
  * @param input - MRZ text or lines. Other input returns `null` without throwing.
- * @param options - Optional `{ referenceDate }` used to infer date centuries.
+ * @param options - Optional `{ referenceDate, allowSexX }`. `referenceDate` is used to infer date centuries.
  * @returns The decoded {@link MrzInfo}, or `null` if the MRZ is malformed or a check digit fails.
  *
  * @example

@@ -33,9 +33,16 @@ export const UAE_AREA_CODES: readonly UaeAreaCodeInfo[] = deepFreeze([
 export const PHONE_SOURCES: readonly ReferenceSource[] = deepFreeze([
   {
     authority: 'Telecommunications and Digital Government Regulatory Authority (TDRA)',
+    title:
+      'Press release, 12 October 2021: mobile number portability applies to numbers starting with 050, 055, 052, 054, 058, and 056',
+    url: 'https://tdra.gov.ae/en/media/press-release/2021/tdra-1-7-million-mobile-numbers-ported-between-service-providers',
+    lastReviewed: '2026-11-25',
+  },
+  {
+    authority: 'Telecommunications and Digital Government Regulatory Authority (TDRA)',
     title: 'National Numbering Plan, Version 5.3 (3 June 2015), Annex 1',
     url: 'https://tdra.gov.ae/-/media/About/regulations-and-ruling/EN/National-Number-Plan-pdf.ashx',
-    lastReviewed: '2026-11-06',
+    lastReviewed: '2026-11-25',
   },
   {
     authority: 'Telecommunications and Digital Government Regulatory Authority (TDRA), via ITU-T',

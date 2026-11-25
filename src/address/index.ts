@@ -4,7 +4,8 @@
  *
  * Import from `uae-validations/address`, or from the package root.
  *
- * Only the structure is checked: 10 digits, written as two groups of five. Whether a
+ * Only the structure is checked: 10 digits, written as two groups of five, as in every example in
+ * Dubai Municipality's Makani web-service manual. Whether a
  * number belongs to a real entrance can only be confirmed through Dubai Municipality's
  * Makani service. The same number can exist in more than one emirate, so a Makani
  * number alone does not identify the emirate.

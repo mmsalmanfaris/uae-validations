@@ -59,7 +59,39 @@ const MODULE_TITLES = {
   currency: 'AED parsing, formatting, and amounts in words',
   vat: 'UAE VAT calculation',
   arabic: 'Arabic text normalization and name validation',
+  i18n: 'Arabic and English validation messages',
 };
+
+/** README FAQ entries (`### question` followed by paragraphs) as schema.org FAQPage JSON-LD. */
+function faqJsonLd() {
+  const readme = readFileSync('README.md', 'utf8');
+  const section = /\n## FAQ\n([\s\S]*?)\n## /.exec(readme)?.[1] ?? '';
+  const plain = (md) =>
+    md
+      .replace(/```[\s\S]*?```/g, '')
+      .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
+      .replace(/[`*_]/g, '')
+      .replace(/\s+/g, ' ')
+      .trim();
+  const mainEntity = section
+    .split(/\n### /)
+    .slice(1)
+    .map((block) => {
+      const [question, ...rest] = block.split('\n');
+      return {
+        '@type': 'Question',
+        name: plain(question),
+        acceptedAnswer: { '@type': 'Answer', text: plain(rest.join('\n')) },
+      };
+    })
+    .filter((entry) => entry.acceptedAnswer.text);
+  if (mainEntity.length === 0) throw new Error('README FAQ section not found');
+  const json = JSON.stringify({ '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity });
+  return `<script type="application/ld+json">${json.replace(/</g, '\\u003c')}</script>`;
+}
+
+const HOME_TITLE =
+  'uae-validations: Emirates ID, UAE phone, IBAN, and TRN validation for TypeScript and JavaScript';
 
 let count = 0;
 for (const file of walk(outDir)) {
@@ -77,10 +109,8 @@ for (const file of walk(outDir)) {
   const moduleName = /^modules[\\/](.+)\.html$/.exec(relative(outDir, file))?.[1];
   const moduleTitle = moduleName && MODULE_TITLES[moduleName];
   if (isHome) {
-    html = html.replace(
-      /<title>[\s\S]*?<\/title>/,
-      '<title>uae-validations: Emirates ID, UAE phone, IBAN, and TRN validation for TypeScript and JavaScript</title>',
-    );
+    html = html.replace(/<title>[\s\S]*?<\/title>/, `<title>${HOME_TITLE}</title>`);
+    html = html.replace('</head>', `${faqJsonLd()}</head>`);
   } else if (moduleTitle) {
     html = html.replace(
       /<title>[\s\S]*?<\/title>/,
@@ -90,7 +120,22 @@ for (const file of walk(outDir)) {
   if (hostedBaseUrl && !html.includes('rel="canonical"')) {
     const path = relative(outDir, file).split(sep).join('/');
     const url = new URL(path === 'index.html' ? '' : path, hostedBaseUrl).href;
-    html = html.replace('</head>', `<link rel="canonical" href="${url}"/></head>`);
+    const pageTitle = isHome
+      ? HOME_TITLE
+      : text(/<title>([\s\S]*?)<\/title>/.exec(html)?.[1] ?? '');
+    const og = [
+      ['og:type', 'website'],
+      ['og:site_name', 'uae-validations'],
+      ['og:title', pageTitle],
+      ['og:description', description],
+      ['og:url', url],
+    ]
+      .map(([property, content]) => `<meta property="${property}" content="${attr(content)}"/>`)
+      .join('');
+    html = html.replace(
+      '</head>',
+      `<link rel="canonical" href="${url}"/>${og}<meta name="twitter:card" content="summary"/></head>`,
+    );
   }
   writeFileSync(file, html);
   count += 1;

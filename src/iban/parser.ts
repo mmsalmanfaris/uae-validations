@@ -79,7 +79,9 @@ export function parseUaeIban(input: unknown): UaeIbanInfo | null {
 
 /**
  * Builds a UAE IBAN from a bank code and account number, computing the check digits.
- * Account numbers shorter than 16 digits are left-padded with zeros, as UAE banks do.
+ * Account numbers shorter than 16 digits are left-padded with zeros. Use it for tests and
+ * conversions only: CBUAE authorises only banks to issue IBANs, so take a customer's IBAN from
+ * their bank.
  *
  * @param bankCode - Three-digit CBUAE bank identifier.
  * @param accountNumber - Account number, up to 16 digits. Spaces and hyphens are ignored.

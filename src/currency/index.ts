@@ -23,6 +23,7 @@ export {
   AED_CURRENCY,
   AED_MAX_DIRHAMS,
   CURRENCY_SOURCES,
+  UAE_DIRHAM_SIGN,
   isValidAed,
   parseAed,
   validateAed,
