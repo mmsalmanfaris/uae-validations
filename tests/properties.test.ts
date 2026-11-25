@@ -64,6 +64,12 @@ const UNKNOWN_INPUT_FUNCTIONS: Record<string, (input: unknown, ...rest: never[])
   isValidDubaiPlate: lib.isValidDubaiPlate,
   validateDubaiPlate: lib.validateDubaiPlate,
   formatDubaiPlate: lib.formatDubaiPlate,
+  parseUaeServiceNumber: lib.parseUaeServiceNumber,
+  isValidUaeServiceNumber: lib.isValidUaeServiceNumber,
+  isValidUaeTollFree: lib.isValidUaeTollFree,
+  validateUaeServiceNumber: lib.validateUaeServiceNumber,
+  formatUaeServiceNumber: lib.formatUaeServiceNumber,
+  translateValidationCode: lib.translateValidationCode as (input: unknown) => unknown,
 };
 
 const idLike = fc

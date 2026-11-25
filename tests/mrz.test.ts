@@ -163,7 +163,10 @@ describe('parseMrz: TD1 and TD2', () => {
 
   it('accepts unspecified sex and names without given names', () => {
     expect(parseMrz(td1({ docNumber: 'A1', sex: '<' }), REF)?.sex).toBe('unspecified');
-    expect(parseMrz(td1({ docNumber: 'A1', sex: 'X' }), REF)?.sex).toBe('unspecified');
+    expect(parseMrz(td1({ docNumber: 'A1', sex: 'X' }), REF)).toBeNull();
+    expect(parseMrz(td1({ docNumber: 'A1', sex: 'X' }), { ...REF, allowSexX: true })?.sex).toBe(
+      'unspecified',
+    );
     expect(parseMrz(td1({ docNumber: 'A1', sex: 'M' }), REF)?.sex).toBe('male');
     expect(parseMrz(td1({ docNumber: 'A1', names: 'MADONNA' }), REF)?.givenNames).toBe('');
   });

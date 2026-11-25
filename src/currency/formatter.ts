@@ -1,9 +1,17 @@
-import { parseAed } from './parser';
+import { parseAed, UAE_DIRHAM_SIGN } from './parser';
 
 /** Options for {@link formatAed}. */
 export interface AedFormatOptions {
-  /** `'code'` (default, `AED 1,234.50`), `'arabic'` (`1,234.50 د.إ`), or `'none'` (`1,234.50`). */
-  display?: 'code' | 'arabic' | 'none';
+  /**
+   * How to mark the currency. Defaults to `'code'`.
+   *
+   * - `'code'`: the ISO 4217 code, `AED 1,234.50`.
+   * - `'symbol'`: the Dirham sign U+20C3 to the left of the amount, separated by a space, as
+   *   the CBUAE guidelines require. Never combined with `AED`.
+   * - `'arabic'`: the Arabic abbreviation after the amount, `1,234.50 د.إ`.
+   * - `'none'`: the amount alone, `1,234.50`.
+   */
+  display?: 'code' | 'symbol' | 'arabic' | 'none';
   /** Use thousands separators. Default `true`. */
   grouping?: boolean;
 }
@@ -18,6 +26,7 @@ export interface AedFormatOptions {
  * @example
  * ```ts
  * formatAed(1234.5); // 'AED 1,234.50'
+ * formatAed(1234.5, { display: 'symbol' }); // '\u20C3 1,234.50'
  * formatAed('1234.5', { display: 'arabic' }); // '1,234.50 د.إ'
  * formatAed(-20, { display: 'none' }); // '-20.00'
  * formatAed(1000000, { grouping: false }); // 'AED 1000000.00'
@@ -32,6 +41,7 @@ export function formatAed(input: unknown, options: AedFormatOptions = {}): strin
       : String(parsed.dirhams).replace(/\B(?=([0-9]{3})+(?![0-9]))/g, ',');
   const number = `${parsed.negative ? '-' : ''}${whole}.${String(parsed.remainderFils).padStart(2, '0')}`;
   if (options.display === 'none') return number;
+  if (options.display === 'symbol') return `${UAE_DIRHAM_SIGN} ${number}`;
   if (options.display === 'arabic') return `${number} د.إ`;
   return `AED ${number}`;
 }

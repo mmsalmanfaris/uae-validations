@@ -3,7 +3,7 @@
     "name": "Everything (ESM)",
     "path": "dist/index.mjs",
     "import": "*",
-    "limit": "12 kB"
+    "limit": "13.5 kB"
   },
   {
     "name": "uae-validations/emirates-id",
@@ -57,7 +57,7 @@
     "name": "uae-validations/vat",
     "path": "dist/vat/index.mjs",
     "import": "{ calculateVat }",
-    "limit": "1.5 kB"
+    "limit": "1.8 kB"
   },
   {
     "name": "uae-validations/arabic",
@@ -76,5 +76,11 @@
     "path": "dist/vehicle/index.mjs",
     "import": "{ validateDubaiPlate }",
     "limit": "1.2 kB"
+  },
+  {
+    "name": "uae-validations/i18n",
+    "path": "dist/i18n/index.mjs",
+    "import": "{ translateValidationCode }",
+    "limit": "3 kB"
   }
 ]

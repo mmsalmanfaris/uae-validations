@@ -30,7 +30,7 @@ export interface MrzInfo {
   nationality: string;
   /** Date of birth. */
   birthDate: MrzDate;
-  /** Sex as printed: `'male'` (`M`), `'female'` (`F`), or `'unspecified'` (`<` or `X`). */
+  /** Sex as printed: `'male'` (`M`), `'female'` (`F`), or `'unspecified'` (`<`, or `X` with `allowSexX`). */
   sex: 'male' | 'female' | 'unspecified';
   /** Date of expiry. */
   expiryDate: MrzDate;
@@ -53,6 +53,12 @@ export interface MrzInfo {
 export interface MrzOptions {
   /** Date used to infer the century of birth and expiry dates. Defaults to today. */
   referenceDate?: Date;
+  /**
+   * Accept `X` in the sex field as unspecified. Default `false`: ICAO Doc 9303 allows only `M`,
+   * `F`, and `<` in the machine-readable zone and reserves `X` for the visual zone. Turn this on
+   * only for documents known to print `X` in the MRZ.
+   */
+  allowSexX?: boolean;
 }
 
 /** Stable error codes returned by {@link validateMrz}. */

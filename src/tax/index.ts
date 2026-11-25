@@ -36,7 +36,14 @@ export const TAX_SOURCES: readonly ReferenceSource[] = deepFreeze([
     title:
       'UAE e-Invoicing: TIN is 10 digits and corresponds to the first 10 digits of the 15-digit TRN',
     url: 'https://www.tax.gov.ae/en/content/uae.einvoicing.aspx',
-    lastReviewed: '2026-11-06',
+    lastReviewed: '2026-11-25',
+  },
+  {
+    authority: 'Ministry of Finance (MoF)',
+    title:
+      'UAE Electronic Invoice Mandatory Fields, V1.1 (28 October 2026): TIN is a 10-digit identifier and the first 10 digits of the 15-digit TRN; group members keep their own TIN',
+    url: 'https://mof.gov.ae/wp-content/uploads/2026/10/UAE-Electronic-Invoice-Mandatory-Field-Requirements.pdf',
+    lastReviewed: '2026-11-25',
   },
 ]);
 
@@ -182,6 +189,11 @@ export function tinFromTrn(trn: unknown): string | null {
 
 /**
  * Checks whether a TIN belongs to a TRN, meaning it equals the TRN's first 10 digits.
+ *
+ * Compare a TIN only with the same entity's own TRN. A member of a Corporate Tax or VAT group
+ * keeps its own TIN, which does not match the group's TRN, and a person with no tax
+ * registration has a TIN but no TRN (Ministry of Finance; FTA). A `false` result therefore
+ * means "not this TRN", not that either number is invalid.
  *
  * @param tin - TIN to compare.
  * @param trn - TRN to compare.

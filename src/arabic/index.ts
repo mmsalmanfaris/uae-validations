@@ -28,14 +28,14 @@ export const ARABIC_SOURCES: readonly ReferenceSource[] = deepFreeze([
   {
     authority: 'Unicode Consortium',
     title: 'The Unicode Standard: Arabic block (U+0600–U+06FF)',
-    url: 'https://www.unicode.org/charts/PDF/U0600.pdf',
+    url: 'https://www.unicode.org/Public/latest/charts/PDF/U0600.pdf',
     lastReviewed: '2026-11-06',
   },
 ]);
 
 /** Options for {@link normalizeArabic}. Each defaults as noted. */
 export interface ArabicNormalizeOptions {
-  /** Remove diacritics (fathatan … sukun, superscript alef). Default `true`. */
+  /** Remove diacritics: U+064B–U+065F (fathatan to sukun, maddah, hamza above and below, and others) and superscript alef U+0670. Default `true`. */
   removeDiacritics?: boolean;
   /** Remove tatweel (ـ). Default `true`. */
   removeTatweel?: boolean;
@@ -109,7 +109,10 @@ export type NameScript = 'arabic' | 'latin' | 'any';
 
 /** Options for {@link validatePersonName}. */
 export interface PersonNameOptions {
-  /** `'arabic'`, `'latin'`, or `'any'` (default: either script, but not mixed in one name). */
+  /**
+   * `'arabic'`, `'latin'`, or `'any'` (default: either script, but not mixed in one name). Other
+   * scripts are not accepted; Arabic and Latin are the scripts used on the Emirates ID.
+   */
   script?: NameScript;
   /** Minimum length in letters, after trimming. Default `2`. */
   minLength?: number;
@@ -143,7 +146,7 @@ const LATIN_NAME = namePattern(LATIN_LETTER);
  *
  * @example
  * ```ts
- * validatePersonName('محمد بن راشد').isValid; // true
+ * validatePersonName('أحمد بن سالم').isValid; // true
  * validatePersonName("Mary-Jane O'Neil").isValid; // true
  * validatePersonName('Ahmed محمد').code; // 'NAME_MIXED_SCRIPTS'
  * validatePersonName('Ahmed', { script: 'arabic' }).code; // 'NAME_INVALID_CHARACTERS'

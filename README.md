@@ -5,14 +5,24 @@
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 **uae-validations** is a zero-dependency TypeScript and JavaScript library for validating,
-parsing, and formatting UAE data: Emirates ID numbers, UAE mobile and landline numbers, UAE
-IBANs, TRN and TIN tax numbers, SWIFT/BIC codes, passport and ID-card MRZ, emirate names, Makani
-numbers, Dubai vehicle plates, AED amounts, VAT, and Arabic names. Every rule cites an official
-source, such as ICP, TDRA, CBUAE, the FTA, RTA, Dubai Municipality, or ICAO.
+parsing, and formatting UAE data: Emirates ID numbers, UAE mobile, landline, and toll-free
+numbers, UAE IBANs, TRN and TIN tax numbers, SWIFT/BIC codes, passport and ID-card MRZ, emirate names, Makani
+numbers, Dubai vehicle plates, AED amounts, VAT, and Arabic names. Each UAE-specific rule is
+based on a published source from the issuing authority (such as ICP, TDRA, CBUAE, the FTA, RTA,
+or Dubai Municipality) or an international standard (ICAO, ISO), listed in the module's
+`*_SOURCES`. Where the package makes its own choice, such as accepted aliases or name rules, the
+docs say so.
+
+> **Independent project.** uae-validations is an independent open-source library. It is not
+> affiliated with, endorsed by, or supported by the UAE Government or any of its authorities,
+> including ICP, TDRA, CBUAE, the FTA, RTA, Dubai Municipality, DMT, or the Dubai Land
+> Department, nor by ICAO, ISO, or Swift. Authority names are used only to identify the public
+> documents each rule is based on.
 
 - TypeScript declarations, ESM and CommonJS, tree-shakeable subpath imports (0.6 to 2.1 kB each, minified and brotli-compressed)
 - Validators take `unknown` and never throw, so they are safe on raw form and API input
 - Arabic-Indic digits (`٠١٢٣`) and right-to-left marks are normalized automatically
+- Error messages in English and Arabic for every error code
 - Works in Node.js 20+, browsers, Deno, and Bun
 
 **Documentation:** [API reference](https://mmsalmanfaris.github.io/uae-validations/), generated
@@ -30,6 +40,8 @@ npm install uae-validations
 
 ## Quick start
 
+All identifiers in these docs are made up; any match with a real number is coincidental.
+
 ```ts
 import { isValidEmiratesId, formatUaePhone, validateUaeIban } from 'uae-validations';
 
@@ -44,6 +56,7 @@ validateUaeIban('AE080331234567890123456').code; // 'IBAN_CHECKSUM_MISMATCH'
 | --- | --- | --- |
 | Emirates ID number | `isValidEmiratesId`, `validateEmiratesId`, `maskEmiratesId` | `uae-validations/emirates-id` |
 | UAE mobile or landline number | `isValidUaeMobile`, `validateUaePhone`, `formatUaePhone` | `uae-validations/phone` |
+| Toll-free (800) or other service number (400, 600, 700, 900) | `isValidUaeTollFree`, `parseUaeServiceNumber` | `uae-validations/phone` |
 | UAE IBAN | `isValidUaeIban`, `parseUaeIban`, `buildUaeIban` | `uae-validations/iban` |
 | TRN or TIN (VAT, Corporate Tax, e-invoicing) | `isValidTrn`, `isValidTin`, `tinFromTrn` | `uae-validations/tax` |
 | SWIFT/BIC code | `isValidUaeBic`, `parseBic` | `uae-validations/swift` |
@@ -51,9 +64,10 @@ validateUaeIban('AE080331234567890123456').code; // 'IBAN_CHECKSUM_MISMATCH'
 | Emirate name or ISO 3166-2 code | `normalizeEmirate`, `findEmirate` | `uae-validations/administrative` |
 | Makani number (building entrance) | `isValidMakani`, `formatMakani` | `uae-validations/address` |
 | Dubai vehicle plate | `isValidDubaiPlate`, `parseDubaiPlate` | `uae-validations/vehicle` |
-| AED amount, or AED in words for cheques and invoices | `parseAed`, `formatAed`, `aedToWords` | `uae-validations/currency` |
+| AED amount, the Dirham sign, or AED in words for cheques and invoices | `parseAed`, `formatAed`, `aedToWords` | `uae-validations/currency` |
 | VAT at 5%, or whether a business must register | `calculateVat`, `getVatRegistrationRequirement` | `uae-validations/vat` |
 | Arabic text and person names | `normalizeArabic`, `validatePersonName`, `areNamesEquivalent` | `uae-validations/arabic` |
+| Error messages in Arabic or English | `translateValidationCode`, `localizeValidationResult` | `uae-validations/i18n` |
 
 Everything is also exported from `uae-validations`.
 
@@ -87,7 +101,7 @@ validateEmiratesId('785199012345676').code; // 'EMIRATES_ID_INVALID_COUNTRY_CODE
 | ---------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
 | 15 digits, `784-YYYY-NNNNNNN-C`                                        | ICP National ID briefing; UAE Design System                                  |
 | Starts with `784` (ISO 3166-1 numeric code for the UAE)                | ICP National ID briefing                                                     |
-| Year field between 1900 and the current year                           | ICP National ID briefing (year of birth); lower bound is this package's choice |
+| Year field between 1900 and the current year                           | ICP National ID briefing (labelled year of birth); lower bound is this package's choice |
 | Separators: none, or hyphens/spaces in the 3-4-7-1 grouping (not mixed) | UAE Design System input pattern                                              |
 
 ### Check digit
@@ -163,11 +177,43 @@ isValidUaeMobile('0531234567', { mobilePrefixes: 'any' }); // true
 ```
 
 Mobile prefixes are **not** mapped to operators. Numbers can be ported between networks, so a
-prefix does not tell you the current operator. Toll-free (`800`), fixed-cost (`600`), premium
-(`900`), and short codes are not supported yet.
+prefix does not tell you the current operator.
 
 Error codes: `PHONE_REQUIRED`, `PHONE_INVALID_FORMAT`, `PHONE_NOT_UAE`, `PHONE_INVALID_PREFIX`,
 `PHONE_UNALLOCATED_MOBILE_PREFIX`, `PHONE_INVALID_SUBSCRIBER_NUMBER`, `PHONE_TYPE_MISMATCH`.
+
+### Toll-free and other service numbers
+
+Non-geographic numbers are dialled without a leading `0`, so they have their own functions and
+`validateUaePhone` keeps meaning a mobile or landline number.
+
+```ts
+import {
+  isValidUaeTollFree,
+  parseUaeServiceNumber,
+  validateUaeServiceNumber,
+  formatUaeServiceNumber,
+} from 'uae-validations/phone';
+
+isValidUaeTollFree('800 12345'); // true
+parseUaeServiceNumber('600 512345')?.type; // 'fixed-cost'
+formatUaeServiceNumber('+971 600-512345'); // '600 512345'
+validateUaeServiceNumber('600 123456').code; // 'SERVICE_NUMBER_RESERVED_RANGE'
+```
+
+| Prefix | Type            | Structure                                   | Source (TDRA NNP v5.3, Annex 1) |
+| ------ | --------------- | ------------------------------------------- | ------------------------------- |
+| `800`  | `toll-free`     | `800` + 2 to 9 digits (5 to 12 in total)    | Level 8                         |
+| `400`  | `free-access`   | `400` + Y + 5 digits, Y = 2 or 4            | Level 4                         |
+| `600`  | `fixed-cost`    | `600` + Y + 5 digits, Y = 2 or 5            | Level 6                         |
+| `700`  | `shared-cost`   | `700` + Y + 5 digits, Y = 0 or 5            | Level 7                         |
+| `900`  | `premium-rate`  | `900` + Y + 5 digits, Y = 0 or 2            | Level 9                         |
+
+The plan reserves the other values of Y for future expansion (an older 2009 ITU filing listed every
+Y for `400`; this package follows the newer plan), and these fail with
+`SERVICE_NUMBER_RESERVED_RANGE`. `600` numbers are **not** free to call. A `+971` prefix is
+accepted and removed, but the plan does not say these numbers can be reached from abroad. Short
+codes and emergency numbers are not covered.
 
 ## IBAN
 
@@ -214,7 +260,7 @@ parseBic('ABCDAEAD')?.bic11; // 'ABCDAEADXXX'
 ```
 
 ISO 9362 structure: party prefix, country (`AE`), location, optional branch. Also reports head-office
-and test BICs.
+and test BICs, which are SWIFT network conventions rather than ISO 9362 rules.
 
 ## MRZ: passports and the back of the Emirates ID
 
@@ -229,8 +275,10 @@ mrzCheckDigit('L898902C3'); // 6
 
 Supports every ICAO Doc 9303 layout: TD1 (ID cards), TD2, TD3 (passports), MRV-A and MRV-B
 (visas), including long document numbers. Every check digit is verified, and `validateMrz` lists
-**each** failing field, which helps tell an OCR misread from a tampered document. For UAE-issued
-cards whose first optional field holds a `784…` number, `emiratesId` returns it.
+**each** failing field, which helps diagnose OCR misreads. Check digits do not prove a document is
+genuine, because anyone can compute them. The sex field accepts `M`, `F`, and `<` as ICAO Doc 9303
+specifies; pass `{ allowSexX: true }` for documents that print `X` in the MRZ. For UAE-issued cards whose first optional field holds a
+`784…` number, `emiratesId` returns it; this is a convention seen on UAE cards, not an ICAO rule.
 
 ## Emirates
 
@@ -256,6 +304,7 @@ import { parseAed, formatAed, aedToWords } from 'uae-validations/currency';
 parseAed('AED 1,234.50')?.fils; // 123450
 parseAed('12.345'); // null
 formatAed(1234.5); // 'AED 1,234.50'
+formatAed(1234.5, { display: 'symbol' }); // '\u20C3 1,234.50'
 aedToWords(1234.5); // 'one thousand two hundred thirty-four dirhams and fifty fils'
 aedToWords(1234.5, { language: 'ar' }); // 'ألف ومائتان وأربعة وثلاثون درهماً وخمسون فلساً'
 aedToWords(200, { language: 'ar', cheque: true }); // 'فقط مائتا درهم لا غير'
@@ -264,6 +313,17 @@ aedToWords(200, { language: 'ar', cheque: true }); // 'فقط مائتا دره�
 Amounts are exact integers of fils; more than two decimal places is an error, never a silent
 rounding. Arabic words follow number–noun agreement (درهمان، ثلاثة دراهم، أحد عشر درهماً) and
 construct forms (مائتا درهم).
+
+### The Dirham sign
+
+The Central Bank of the UAE introduced a Dirham sign in March 2025, and Unicode 18.0 encodes it
+as U+20C3 `UAE DIRHAM SIGN` (exported as `UAE_DIRHAM_SIGN`). `display: 'symbol'` follows the
+CBUAE guidelines: the sign goes to the left of the amount with a space between, and is never
+combined with `AED`. Fonts released before Unicode 18.0 may not draw it, so check yours before
+showing it to users, or keep the default `'code'` display. `parseAed` accepts the sign. For
+amounts in words, CBUAE says to write "Dirhams" in full, which is what `aedToWords` does. When
+rendering, CBUAE also asks that the sign match the digits' font size and weight, not be
+superscript or subscript, be at least 12px on screen, and not be used as a logo or branding.
 
 ## VAT
 
@@ -277,6 +337,9 @@ getVatRegistrationRequirement(400000); // 'mandatory'
 
 5% standard rate; FTA thresholds of AED 375,000 (mandatory) and AED 187,500 (voluntary). Exact
 fils arithmetic, rounding half away from zero, and `net + vat = gross` always holds.
+`getVatRegistrationRequirement` covers UAE-resident businesses on their past 12 months of
+supplies only; non-residents and the 30-day forward-looking test are not covered. It is not tax
+advice.
 
 ## Arabic text and names
 
@@ -286,12 +349,13 @@ import { normalizeArabic, areNamesEquivalent, isValidPersonName } from 'uae-vali
 normalizeArabic('أَحْمَد'); // 'احمد'
 areNamesEquivalent('عبد الله', 'عبدالله'); // true
 areNamesEquivalent('Mohammed', 'Muhammad'); // false
-isValidPersonName('محمد بن راشد'); // true
+isValidPersonName('أحمد بن سالم'); // true
 isValidPersonName('Ahmed محمد'); // false
 ```
 
 Removes diacritics and tatweel, unifies alef and Persian-keyboard letters, and optionally taa
 marbuta, alef maqsura, and hamza. Name matching never transliterates or guesses between spellings.
+Only Arabic and Latin scripts, the scripts used on the Emirates ID, are accepted in names.
 
 ## Makani numbers
 
@@ -303,8 +367,8 @@ parseMakani('Makani No. 00410 85963')?.makani; // '0041085963'
 formatMakani('3003295320'); // '30032 95320'
 ```
 
-Makani numbers identify building entrances. Dubai Municipality's Makani web-service manual writes
-them as 10 digits in two groups of five. Only the structure is checked: whether a number belongs
+Makani numbers identify building entrances. Every example in Dubai Municipality's Makani
+web-service manual is 10 digits in two groups of five; the manual has no separate format rule. Only the structure is checked: whether a number belongs
 to a real entrance can only be confirmed through Dubai Municipality's Makani service. The manual
 also notes that the same number can exist in more than one emirate, so a Makani number does not
 tell you the emirate. Pass Makani numbers as strings, because numbers drop leading zeros.
@@ -323,8 +387,10 @@ validateDubaiPlate('ABC 123').code; // 'PLATE_INVALID_CODE'
 validateDubaiPlate('A 123456').code; // 'PLATE_INVALID_NUMBER'
 ```
 
-A Dubai plate is a code of one or two letters (such as `A`, `V`, or `AA`) followed by a number of
-one to five digits (RTA). Only the structure is checked, not whether the plate has been issued.
+A Dubai plate is a code of one letter or a doubled letter (such as `A`, `V`, or `AA`) followed by
+a number of one to five digits (RTA). RTA has published only doubled dual codes (`AA`, `BB`,
+`CC`), so mixed pairs such as `AB` are rejected. Numbers starting with `0` are rejected too; that
+is this package's choice, because RTA publishes no such plates. Only the structure is checked, not whether the plate has been issued.
 Export, trade, and diplomatic plates are not covered.
 
 ### Other emirates and tenancy contracts
@@ -340,6 +406,23 @@ These are left out on purpose, because no official format is published:
 Third-party guides describe these formats, but they disagree with each other. A validator built
 from them could reject real values. Each will be added once an official specification is
 available.
+
+## Error messages in Arabic
+
+Every failure has a stable `code`. `uae-validations/i18n` turns it into an English or Arabic
+message, and you can replace the wording for any code.
+
+```ts
+import { translateValidationCode, localizeValidationResult } from 'uae-validations/i18n';
+import { validateUaeIban } from 'uae-validations/iban';
+
+translateValidationCode('EMIRATES_ID_REQUIRED', 'ar'); // 'رقم الهوية الإماراتية مطلوب.'
+localizeValidationResult(validateUaeIban('AE080331234567890123456'), 'ar').error; // 'رقما التحقق في رقم IBAN غير مطابقين.'
+translateValidationCode('PHONE_REQUIRED', 'en', { PHONE_REQUIRED: 'Enter your mobile number' }); // 'Enter your mobile number'
+```
+
+Where a validator puts a value in its English message, such as the allowed year range for an
+Emirates ID, the translated message is the general one for that code.
 
 ## Use with forms and APIs
 
@@ -376,6 +459,27 @@ app.post('/contacts', (req, res) => {
 });
 ```
 
+## How it compares
+
+uae-validations covers UAE-specific identifiers that general-purpose libraries do not. For phone
+numbers of every country, use libphonenumber-js; for UAE-only forms, one dependency covers all of
+the fields below.
+
+| Check | uae-validations | libphonenumber-js | validator.js |
+| --- | --- | --- | --- |
+| Emirates ID (`784`, year, optional Luhn) | Yes | No | No |
+| UAE mobile numbers | Yes: TDRA-allocated codes by default, or every `05Z` code | Yes (its metadata also accepts `053`) | Yes (`isMobilePhone('ar-AE')`) |
+| UAE landlines, with TDRA subscriber ranges | Yes | Yes | No |
+| Toll-free `800` and `600` numbers | Yes | Yes | No |
+| UAE IBAN with MOD 97-10 checksum | Yes | No | Yes (`isIBAN`, any country) |
+| TRN and TIN | Yes | No | No |
+| MRZ, Makani, Dubai plates, AED in words, VAT | Yes | No | No |
+| Error messages in Arabic | Yes | No | No |
+
+Checked on 2026-11-25 with libphonenumber-js 1.13.17 and validator 13.15.35, using the synthetic
+numbers in this README. libphonenumber-js accepts `053`, which TDRA has not listed as
+allocated; to accept it here, pass `{ mobilePrefixes: 'any' }`.
+
 ## FAQ
 
 ### How do I validate an Emirates ID in JavaScript?
@@ -398,6 +502,20 @@ A UAE mobile number is `05` plus one digit plus seven digits, such as `050 123 4
 and 058, so `isValidUaeMobile` rejects 051, 053, 057, and 059 by default. A prefix does not tell
 you the operator, because numbers can be ported.
 
+### How do I validate a UAE toll-free number in JavaScript?
+
+Call `isValidUaeTollFree(value)` from `uae-validations/phone`. A UAE toll-free number is `800`
+followed by 2 to 9 digits, per the TDRA National Numbering Plan, and is dialled without a leading
+`0`. For `600` and the other service ranges, use `parseUaeServiceNumber`, which returns the type,
+such as `'fixed-cost'`.
+
+### How do I show the new UAE Dirham symbol in JavaScript?
+
+Call `formatAed(amount, { display: 'symbol' })` from `uae-validations/currency`. It writes the
+Dirham sign, Unicode U+20C3, to the left of the amount with a space, as the Central Bank of the
+UAE's guidelines require, and never together with `AED`. Fonts released before Unicode 18.0 may
+not draw the sign yet.
+
 ### Why not just use a regex?
 
 A regex checks shape, not meaning. It accepts an Emirates ID from the year 2099, a mobile number
@@ -410,12 +528,21 @@ specific error code for each failure.
 The Federal Tax Authority issues a 15-digit Tax Registration Number (TRN) to VAT and Corporate
 Tax registrants, and a 10-digit Tax Identification Number (TIN), used for e-invoicing, which is
 the first 10 digits of the TRN. `tinFromTrn` extracts it, and `doesTinMatchTrn` compares them.
+Compare a TIN only with the same entity's own TRN: a Corporate Tax or VAT group member keeps its
+own TIN, which does not match the group TRN, and a person with no tax registration has a TIN but
+no TRN (Ministry of Finance).
 
 ### Does validation prove a number is real?
 
 No. Validation confirms the format and, where one exists, the checksum. It cannot confirm that an
 Emirates ID, phone number, IBAN, TRN, Makani number, or plate is issued or belongs to a person.
 Use the issuing authority's own service for that, such as the FTA's TRN verification.
+
+### Can I show validation errors in Arabic?
+
+Yes. Pass any failed result to `localizeValidationResult(result, 'ar')`, or a code to
+`translateValidationCode(code, 'ar')`, from `uae-validations/i18n`. Every error code in the
+package has an English and an Arabic message, and the `code` itself never changes.
 
 ### Does it support Arabic input?
 
@@ -426,7 +553,7 @@ so `isValidEmiratesId('٧٨٤١٩٩٠١٢٣٤٥٦٧٦')` returns `true`. Emirate
 ## Data sources
 
 Each module exports its sources as a `*_SOURCES` constant with a `lastReviewed` date. All rules
-were last reviewed on 2026-11-06.
+were last reviewed between 2026-11-06 and 2026-11-25.
 
 | Module | Authority |
 | --- | --- |
@@ -439,7 +566,7 @@ were last reviewed on 2026-11-06.
 | `administrative` | ISO 3166-2:AE; UAE Government portal (u.ae) |
 | `address` | Dubai Municipality (Makani); Abu Dhabi Department of Municipalities and Transport (Onwani) |
 | `vehicle` | Roads and Transport Authority (RTA), Dubai |
-| `currency` | ISO 4217 |
+| `currency` | ISO 4217; Central Bank of the UAE (Dirham sign guidelines); Unicode 18.0 (U+20C3) |
 | `arabic` | Unicode Standard |
 
 Spotted an out-of-date rule? [Report a data correction](https://github.com/mmsalmanfaris/uae-validations/issues/new?template=data_correction.yml)
@@ -468,7 +595,6 @@ Next:
 | `vehicle`  | Plates for other emirates, once their authorities publish the code scheme |
 | `property` | Ejari and Tawtheeq contract numbers, once a format is published           |
 | `business` | Trade licence authorities, including free zones                           |
-| `i18n`     | Arabic messages for every error code                                      |
 | `schema`   | Zod, Yup, and React Hook Form adapters                                    |
 
 ## Contributing
@@ -481,6 +607,31 @@ Contributions are welcome. Read [CONTRIBUTING.md](CONTRIBUTING.md) for the branc
 - A rule or source is out of date? [Report a data correction](https://github.com/mmsalmanfaris/uae-validations/issues/new?template=data_correction.yml).
 - Security problem? Report it privately; see [SECURITY.md](SECURITY.md).
 
+## Privacy
+
+uae-validations runs entirely in your process. It makes no network requests, stores nothing, and
+does not log. Error messages never contain the value that was checked. Emirates ID numbers, MRZ
+data, names, phone numbers, and IBANs are personal data under the UAE Personal Data Protection
+Law (Federal Decree-Law No. 45 of 2021) and, where applicable, the DIFC and ADGM data protection
+laws. Using this library does not make your application compliant with them. Do not log raw
+values; log the error `code`, or a masked value from `maskEmiratesId`, `maskUaeIban`, or
+`maskTrn`. Masked values are less identifying but can still be personal data, and must not be
+treated as anonymised.
+
+## Limitations and disclaimer
+
+This library checks the format and, where one exists, the checksum of a value. It does not verify
+identity, confirm that a number was issued or belongs to anyone, authenticate documents, or
+provide legal, tax, or regulatory advice. A passing result is not a KYC, AML/CFT, tax, or other
+compliance determination. If you are a regulated business, verify identity and data through the
+issuing authority's services and follow your regulator's requirements. Rules can change after
+the `lastReviewed` date shown in each module's `*_SOURCES`. The software is provided "as is",
+without warranty, under the [MIT License](LICENSE).
+
 ## License
 
 MIT © M.M. Salman Faris
+
+Swift is a trademark of S.W.I.F.T. SC. Emirates ID, Makani, Onwani, Ejari, and Tawtheeq are names
+of UAE government services and belong to their respective authorities. All names are used only to
+identify the data formats they refer to.

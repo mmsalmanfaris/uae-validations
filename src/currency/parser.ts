@@ -11,6 +11,13 @@ export const AED_CURRENCY = deepFreeze({
   nameAr: 'درهم إماراتي',
 } as const);
 
+/**
+ * The UAE Dirham sign, U+20C3 (`UAE DIRHAM SIGN`), introduced by the Central Bank of the UAE
+ * in March 2025 and encoded in Unicode 18.0. Fonts released before Unicode 18.0 may not
+ * draw it, so check your fonts before showing it to users.
+ */
+export const UAE_DIRHAM_SIGN = '\u20C3';
+
 /** Largest amount accepted, in dirhams (just under one trillion), so fils stay exact as numbers. */
 export const AED_MAX_DIRHAMS = 999_999_999_999;
 
@@ -19,8 +26,26 @@ export const CURRENCY_SOURCES: readonly ReferenceSource[] = deepFreeze([
   {
     authority: 'SIX Group (ISO 4217 maintenance agency)',
     title: 'ISO 4217 currency code list: AED, 784, 2 minor units',
-    url: 'https://www.six-group.com/en/products-services/financial-information/data-standards.html',
+    url: 'https://www.six-group.com/en/products-services/financial-information/market-reference-data/data-standards.html',
     lastReviewed: '2026-11-06',
+  },
+  {
+    authority: 'Central Bank of the UAE (CBUAE)',
+    title: 'The Guidelines for the National Currency Symbol "UAE Dirham", version 1.0',
+    url: 'https://centralbank.ae/media/e4ebcgtb/the_guidelines_for_the_national_currency_symbol_uae_dirham_english.pdf',
+    lastReviewed: '2026-11-25',
+  },
+  {
+    authority: 'Unicode Consortium',
+    title: 'Unicode 18.0.0, UnicodeData.txt: U+20C3 UAE DIRHAM SIGN',
+    url: 'https://www.unicode.org/Public/18.0.0/ucd/UnicodeData.txt',
+    lastReviewed: '2026-11-25',
+  },
+  {
+    authority: 'Unicode Consortium',
+    title: 'Announcing The Unicode Standard, Version 18.0 (released 16 September 2026)',
+    url: 'https://blog.unicode.org/2026/09/announcing-unicode-standard-version-180.html',
+    lastReviewed: '2026-11-25',
   },
 ]);
 
@@ -52,7 +77,8 @@ export type AedErrorCode =
   | 'AED_NEGATIVE'
   | 'AED_TOO_LARGE';
 
-const CURRENCY_MARKER = /^(?:AED|DHS?|د\.?\s?إ\.?|درهم)\s*|\s*(?:AED|DHS?|د\.?\s?إ\.?|درهم)$/giu;
+const CURRENCY_MARKER =
+  /^(?:AED|DHS?|د\.?\s?إ\.?|درهم|\u20C3)\s*|\s*(?:AED|DHS?|د\.?\s?إ\.?|درهم|\u20C3)$/giu;
 
 /** @internal Converts an exact fils count to {@link AedAmount}. */
 export function fromFils(fils: number): AedAmount {
@@ -105,7 +131,7 @@ function inspect(
  * Parses an AED amount exactly, without floating-point rounding.
  *
  * Accepts numbers and strings such as `'1234.5'`, `'1,234.50'`, `'AED 1,234.50'`,
- * `'Dhs 10'`, `'10 د.إ'`, and Arabic-Indic digits. Amounts with more than two decimal
+ * `'Dhs 10'`, `'10 د.إ'`, the Dirham sign (`'\u20C3 10'`), and Arabic-Indic digits. Amounts with more than two decimal
  * places are rejected rather than silently rounded. Thousands separators, if used, must
  * be correctly placed.
  *
@@ -117,6 +143,7 @@ function inspect(
  * ```ts
  * parseAed('AED 1,234.50')?.fils; // 123450
  * parseAed('Dhs 10')?.amount; // '10.00'
+ * parseAed('\u20C3 1,234.50')?.fils; // 123450
  * parseAed(0.1 + 0.2)?.amount; // '0.30'
  * parseAed(1.005); // null
  * parseAed('-5', { allowNegative: true })?.amount; // '-5.00'

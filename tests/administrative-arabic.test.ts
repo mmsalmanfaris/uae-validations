@@ -149,7 +149,7 @@ describe('containsArabic', () => {
 describe('validatePersonName', () => {
   it.each([
     'محمد',
-    'مُحَمَّد بن راشد',
+    'أَحْمَد بن سالم',
     'عبد الله',
     'Ahmed',
     'Mary-Jane',

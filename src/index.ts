@@ -41,3 +41,6 @@ export * from './vat';
 
 // Text
 export * from './arabic';
+
+// Messages
+export * from './i18n';

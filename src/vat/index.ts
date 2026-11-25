@@ -43,9 +43,16 @@ export const VAT_SOURCES: readonly ReferenceSource[] = deepFreeze([
   },
   {
     authority: 'UAE Government',
-    title: 'Federal Decree-Law No. 8 of 2017 on Value Added Tax: standard rate of 5%',
-    url: 'https://tax.gov.ae/en/legislation.aspx',
-    lastReviewed: '2026-11-06',
+    title: 'Federal Decree-Law No. 8 of 2017 on Value Added Tax, Article 3: standard rate of 5%',
+    url: 'https://tax.gov.ae/DataFolder/Files/Pdf/VAT-Decree-Law-No-8-of-2017.pdf',
+    lastReviewed: '2026-11-25',
+  },
+  {
+    authority: 'UAE Cabinet',
+    title:
+      'Cabinet Decision No. 52 of 2017 (VAT Executive Regulation), Articles 7, 8, and 61: registration thresholds and rounding to the nearest fils',
+    url: 'https://tax.gov.ae/-/media/Files/FTA/links/Legislation/VAT/03-Cabinet-Decision-52-of-2017.pdf',
+    lastReviewed: '2026-11-25',
   },
 ]);
 
@@ -139,9 +146,11 @@ export type VatRegistrationRequirement = 'mandatory' | 'voluntary' | 'not-eligib
 /**
  * Compares 12-month taxable supplies and imports with the FTA registration thresholds.
  *
- * This applies to UAE-resident businesses. Non-resident businesses must register
- * whatever their turnover, and businesses expecting to exceed a threshold in the next
- * 30 days are also covered; neither case can be decided from one figure.
+ * This applies to UAE-resident businesses. Non-resident businesses have no threshold: they
+ * must register when they make supplies on which no other person must account for the tax
+ * (Federal Decree-Law No. 8 of 2017, Article 13(2)). Businesses expecting to exceed a
+ * threshold in the next 30 days must also register. Neither case can be decided from one
+ * figure.
  *
  * @param taxableSupplies - Taxable supplies and imports over the previous 12 months, in AED.
  * @returns `'mandatory'` above AED 375,000, `'voluntary'` above AED 187,500, otherwise `'not-eligible'`; `null` for invalid input.

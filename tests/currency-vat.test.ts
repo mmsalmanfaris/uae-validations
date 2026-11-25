@@ -4,6 +4,7 @@ import {
   AED_CURRENCY,
   AED_MAX_DIRHAMS,
   CURRENCY_SOURCES,
+  UAE_DIRHAM_SIGN,
   aedToWords,
   formatAed,
   isValidAed,
@@ -23,6 +24,32 @@ describe('AED_CURRENCY', () => {
   it('matches ISO 4217', () => {
     expect(AED_CURRENCY).toMatchObject({ code: 'AED', numericCode: '784', minorUnits: 2 });
     expect(CURRENCY_SOURCES.length).toBeGreaterThan(0);
+  });
+});
+
+describe('UAE Dirham sign', () => {
+  it('is U+20C3', () => {
+    expect(UAE_DIRHAM_SIGN.codePointAt(0)).toBe(0x20c3);
+    expect(UAE_DIRHAM_SIGN).toHaveLength(1);
+  });
+
+  it('is formatted to the left of the amount, never with AED', () => {
+    expect(formatAed(1234.5, { display: 'symbol' })).toBe('\u20C3 1,234.50');
+    expect(formatAed(-20, { display: 'symbol', grouping: false })).toBe('\u20C3 -20.00');
+    expect(formatAed(1, { display: 'symbol' })).not.toContain('AED');
+  });
+
+  it('is accepted by parseAed before or after the amount', () => {
+    expect(parseAed('\u20C3 1,234.50')?.fils).toBe(123450);
+    expect(parseAed('\u20C31234.50')?.fils).toBe(123450);
+    expect(parseAed('10 \u20C3')?.fils).toBe(1000);
+    expect(parseAed(formatAed(99.99, { display: 'symbol' }))?.fils).toBe(9999);
+  });
+
+  it('cites CBUAE and Unicode', () => {
+    expect(CURRENCY_SOURCES.map((s) => s.authority)).toEqual(
+      expect.arrayContaining(['Central Bank of the UAE (CBUAE)', 'Unicode Consortium']),
+    );
   });
 });
 

@@ -7,6 +7,45 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- `uae-validations/i18n`: English and Arabic messages for every error code, with
+  `translateValidationCode`, `localizeValidationResult`, `VALIDATION_MESSAGES`, and the
+  `UaeValidationCode` type. The message table is typed by every module's error codes, so a
+  missing translation fails type checking.
+- `uae-validations/phone`: non-geographic numbers from the TDRA National Numbering Plan
+  v5.3, Annex 1: toll-free `800` (5 to 12 digits), free-access `400`, fixed-cost `600`,
+  shared-cost `700`, and premium-rate `900`, with `parseUaeServiceNumber`,
+  `isValidUaeServiceNumber`, `isValidUaeTollFree`, `validateUaeServiceNumber`,
+  `formatUaeServiceNumber`, and `UAE_SERVICE_RANGES`. Ranges the plan reserves fail with
+  `SERVICE_NUMBER_RESERVED_RANGE`. `validateUaePhone` is unchanged.
+- `uae-validations/currency`: the Dirham sign U+20C3 (`UAE_DIRHAM_SIGN`, Unicode 18.0).
+  `formatAed(value, { display: 'symbol' })` places it to the left of the amount, as the CBUAE
+  guidelines require, and `parseAed` accepts it. `CURRENCY_SOURCES` cites the CBUAE
+  guidelines and the Unicode data file.
+- `parseMrz` and `validateMrz` accept `{ allowSexX: true }` for documents that print `X` in the
+  sex field.
+
+### Changed
+
+- MRZ: the sex field now accepts only `M`, `F`, and `<` by default, as ICAO Doc 9303 specifies.
+  `X` belongs to the visual zone.
+- Dubai plates: a two-letter code must be a doubled letter (`AA`, `BB`, `CC`), the only dual
+  codes RTA has published. Mixed pairs such as `AB` fail with `PLATE_INVALID_CODE`.
+
+### Fixed
+
+- Docs no longer state that the Emirates ID year field is the holder's year of birth. ICP's
+  briefing labels it so, but EIDA has said it does not necessarily match.
+- Docs say that `doesTinMatchTrn` applies only to an entity's own TRN (group members keep their
+  own TIN), that `XXX` head-office and test BICs are SWIFT conventions rather than ISO 9362
+  rules, and how VAT registration applies to non-residents.
+- Sources: added the TDRA 2021 mobile-prefix press release, the Ministry of Finance e-invoicing
+  field requirements, the VAT Decree-Law and Executive Regulation PDFs, and the Unicode 18.0
+  release announcement; updated moved URLs.
+- README: added an independent-project notice, a Privacy section, and a Limitations and
+  disclaimer section.
+
 ## [0.1.0] - 2026-11-07
 
 ### Added

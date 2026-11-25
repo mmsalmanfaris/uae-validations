@@ -59,7 +59,7 @@ export const VEHICLE_SOURCES: readonly ReferenceSource[] = deepFreeze([
 
 /** A structurally valid Dubai plate, returned by {@link parseDubaiPlate}. */
 export interface DubaiPlateInfo {
-  /** The plate code: one or two Latin letters, uppercase. */
+  /** The plate code: one Latin letter, or a doubled letter such as `AA`, uppercase. */
   code: string;
   /** The plate number: one to five digits, without leading zeros. */
   number: string;
@@ -85,7 +85,9 @@ function inspectDubaiPlate(
   if (!match) return { code: 'PLATE_INVALID_FORMAT' };
   const code = match[1]!.toUpperCase();
   const number = match[2]!;
-  if (code.length > 2) return { code: 'PLATE_INVALID_CODE' };
+  // RTA publishes single-letter codes and doubled dual codes (AA, BB, CC), never mixed pairs.
+  if (!/^([A-Z])\1?$/.test(code)) return { code: 'PLATE_INVALID_CODE' };
+  // A leading 0 is this package's choice: RTA publishes no plate numbers that start with 0.
   if (number.length > 5 || number.startsWith('0')) return { code: 'PLATE_INVALID_NUMBER' };
   return { info: { code, number, digitCount: number.length, formatted: `${code} ${number}` } };
 }
@@ -151,7 +153,10 @@ export function validateDubaiPlate(input: unknown): ValidationResult<DubaiPlateI
     case 'PLATE_INVALID_FORMAT':
       return createFailure('Plate must be a letter code followed by a number.', result.code);
     case 'PLATE_INVALID_CODE':
-      return createFailure('Plate code must be one or two letters.', result.code);
+      return createFailure(
+        'Plate code must be one letter or a doubled letter such as AA.',
+        result.code,
+      );
     case 'PLATE_INVALID_NUMBER':
       return createFailure(
         'Plate number must be one to five digits and must not start with 0.',
